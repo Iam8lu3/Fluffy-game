@@ -201,7 +201,7 @@ body {
 .menu-link:disabled { color: rgba(239,229,213,0.35); cursor: not-allowed; }
 .menu-link:disabled:hover { transform: none; letter-spacing: 0.02em; }
 
-/* verb buttons */
+/* verb buttons (legacy) */
 .verb-btn {
     font-family: 'IM Fell English SC', serif;
     font-size: 1.05rem;
@@ -215,6 +215,127 @@ body {
 }
 .verb-btn:hover { background: rgba(255,176,66,0.12); color: var(--fl-candle-soft); border-color: var(--fl-candle); transform: translateY(-1px); }
 .verb-btn.active { background: var(--fl-candle); color: var(--fl-ink); border-color: var(--fl-candle); }
+
+/* ----- Ornate Verb Panel ----- */
+.verb-panel-wrap {
+    background:
+        radial-gradient(ellipse at top, rgba(255,176,66,0.05), transparent 65%),
+        linear-gradient(180deg, #11151f 0%, #080b14 100%);
+    border: 1px solid rgba(184, 134, 11, 0.45);
+    box-shadow:
+        inset 0 0 22px rgba(0,0,0,0.7),
+        0 4px 14px rgba(0,0,0,0.6);
+    padding: 6px 8px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--fl-light);
+}
+.verb-panel-title {
+    text-align: center;
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(239,229,213,0.55);
+    padding-bottom: 1px;
+    border-bottom: 1px solid rgba(184,134,11,0.22);
+}
+.verb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    flex: 1;
+    min-height: 0;
+}
+.verb-tile {
+    --tile-glow: #7adc6e;
+    position: relative;
+    aspect-ratio: 1 / 0.68;
+    background:
+        radial-gradient(ellipse at center, rgba(50, 90, 100, 0.45) 0%, rgba(15, 28, 38, 0.85) 70%),
+        linear-gradient(180deg, #1a2935, #0c1620);
+    border: 2px solid #5a4624;
+    border-radius: 6px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 215, 130, 0.18),
+        inset 0 0 18px rgba(0,0,0,0.6),
+        0 2px 8px rgba(0,0,0,0.6);
+    cursor: inherit;
+    transition: transform 0.18s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 4px 2px 5px;
+    overflow: hidden;
+}
+.verb-tile:hover {
+    border-color: #b88a3a;
+    transform: translateY(-1px);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 215, 130, 0.3),
+        inset 0 0 22px rgba(0,0,0,0.55),
+        0 4px 14px rgba(0,0,0,0.7),
+        0 0 16px rgba(255, 176, 66, 0.18);
+}
+.verb-tile.active {
+    border-color: var(--tile-glow);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 215, 130, 0.45),
+        inset 0 0 22px rgba(0,0,0,0.5),
+        0 0 0 1px var(--tile-glow),
+        0 0 22px color-mix(in srgb, var(--tile-glow) 55%, transparent),
+        0 4px 14px rgba(0,0,0,0.6);
+}
+.verb-tile .gem {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--tile-glow);
+    box-shadow: 0 0 6px var(--tile-glow);
+    opacity: 0.55;
+    transition: opacity 0.2s ease;
+}
+.verb-tile.active .gem { opacity: 1; }
+.gem-tl { top: 4px;   left: 4px;   }
+.gem-tr { top: 4px;   right: 4px;  background: #ffd166; box-shadow: 0 0 6px #ffd166; }
+.gem-bl { bottom: 4px;left: 4px;   background: #5fc7ff; box-shadow: 0 0 6px #5fc7ff; }
+.gem-br { bottom: 4px;right: 4px;  }
+.verb-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter:
+        drop-shadow(0 0 6px color-mix(in srgb, var(--tile-glow) 70%, transparent))
+        drop-shadow(0 1px 0 rgba(0,0,0,0.7));
+}
+.verb-tile.active .verb-icon {
+    filter:
+        drop-shadow(0 0 10px var(--tile-glow))
+        drop-shadow(0 0 16px color-mix(in srgb, var(--tile-glow) 45%, transparent));
+}
+.verb-label {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(239,229,213,0.85);
+    line-height: 1;
+    margin-top: 1px;
+}
+.verb-tile.active .verb-label { color: var(--fl-candle-soft); text-shadow: 0 0 6px rgba(255,176,66,0.45); }
+
+.verb-action-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+    padding-top: 1px;
+    border-top: 1px solid rgba(184,134,11,0.18);
+    min-height: 14px;
+    font-size: 0.62rem;
+}
 
 /* inventory slot */
 .inv-slot {
