@@ -114,27 +114,35 @@ export default function MainMenu() {
                     <div className="candle-decor flicker" style={{ right: '22%', bottom: '62%' }} />
                     <div className="candle-decor flicker" style={{ right: '34%', bottom: '54%' }} />
 
-                    {/* Tip-the-Cat QR — in-character donation card */}
+                    {/* Support-the-Demo card — promo art + scannable QR; both clickable, both go to PayPal */}
                     <a
-                        href="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/mqmyz40p_image.png"
+                        href="https://www.paypal.com/ncp/payment/EQJTSHCLFFSAQ"
                         target="_blank"
                         rel="noopener noreferrer"
                         data-testid="tip-the-cat-qr"
                         className="absolute right-10 bottom-12 pointer-events-auto group block"
                     >
                         <div className="qr-card">
+                            <div className="qr-promo">
+                                <img
+                                    src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/rjgeyqs9_712504479_17966153451119856_65797109207246429_n.jpg"
+                                    alt="Fluffy — Nine Lives, Nine Legends"
+                                    draggable={false}
+                                />
+                                <span className="qr-promo-cta">Support the Demo</span>
+                            </div>
                             <div className="qr-card-header">
                                 <span className="qr-card-title">Offerings</span>
                                 <span className="qr-card-sub">{isFantasy ? 'tribute to the Demon Destroyer' : 'tip the cat, if you like'}</span>
                             </div>
                             <div className="qr-card-image">
                                 <img
-                                    src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/mqmyz40p_image.png"
-                                    alt="Tip the Cat — scan to donate"
+                                    src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/wrpz5p2t_qrcode.png"
+                                    alt="PayPal — scan to tip the cat"
                                     draggable={false}
                                 />
                             </div>
-                            <div className="qr-card-footer">— scan with thy device —</div>
+                            <div className="qr-card-footer">— scan or click to PayPal —</div>
                         </div>
                     </a>
                 </div>
