@@ -45,8 +45,24 @@
     background-position: center;
     transition: opacity 700ms ease, filter 700ms ease;
 }
-.scene-bg.reality { filter: saturate(0.5) contrast(0.95) brightness(0.95); }
-.scene-bg.fantasy { filter: saturate(1.05) contrast(1.05); }
+.scene-bg.reality { filter: saturate(1.05) contrast(1) brightness(1); }
+.scene-bg.fantasy { filter: hue-rotate(-22deg) saturate(1.35) contrast(1.12) brightness(0.88); }
+
+/* Magic overlay shown only in fantasy mode — sparkles + purple bloom */
+.scene-magic-overlay {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(120, 60, 180, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 22% 28%, rgba(255, 176, 66, 0.25) 0%, transparent 8%),
+        radial-gradient(circle at 78% 36%, rgba(180, 120, 255, 0.3) 0%, transparent 6%),
+        radial-gradient(circle at 64% 70%, rgba(255, 120, 200, 0.22) 0%, transparent 7%),
+        radial-gradient(circle at 38% 80%, rgba(120, 220, 255, 0.2) 0%, transparent 6%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 700ms ease;
+}
+.scene-magic-overlay.on { opacity: 1; animation: flicker 5s ease-in-out infinite; }
 
 .scene-overlay-grad {
     position: absolute; inset: 0;

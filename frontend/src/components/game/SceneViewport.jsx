@@ -20,6 +20,7 @@ export default function SceneViewport({ room, mode, children }) {
                 style={{ backgroundImage: `url(${bg})` }}
             />
             <div className="scene-overlay-grad" />
+            <div className={`scene-magic-overlay ${mode === 'fantasy' ? 'on' : ''}`} />
 
             {/* Hotspots */}
             {room.hotspots.map(hs => {

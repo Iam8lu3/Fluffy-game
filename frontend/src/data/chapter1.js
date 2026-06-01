@@ -4,6 +4,7 @@
 export const ASSETS = {
     sceneFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/d8532f2a98e95bc5bcad21411802a65be6faa77edd361b8e5f037075098a9d36.png',
     sceneReality: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/761104f77de60a97a22ebca05f3ce87db2790d40cb342c61928b6701475f02e2.png',
+    livingroom:   'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/knj9vvrm_Living%20room.png',
     portraitFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/502fe4e92af9d6facecf8b4ffc4f0023b324ba0ec5aa10fe76a0875c5746d22c.png',
     portraitReality: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/41a170430063921ba188d8ead4ca03cae7475b6be0c6ab17ac0f0c9d9590afb1.png',
     menuBg: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a199ba31e0c1f11e9a95f17923d3991a7ef30a767a2b6749b51f14e0daeefcc3.png',
@@ -124,63 +125,125 @@ export const ROOMS = {
     livingroom: {
         id: 'livingroom',
         titleFantasy: 'Hall of the Cursed Throne',
-        titleReality: 'The Living Room',
-        bgFantasy: ASSETS.sceneFantasy,
-        bgReality: ASSETS.sceneReality,
+        titleReality: 'Our Living Room',
+        bgFantasy: ASSETS.livingroom,
+        bgReality: ASSETS.livingroom,
         onEnterMonologue: {
             once: true,
-            fantasy: "I enter the Hall. The Dust Wyrm Mor'thrax slumbers here, coiled in its iron casing, waiting to wake and devour all that is loose upon the floor.",
-            reality: "The living room. The vacuum cleaner is leaning against the wall. It looks at you. You look at it. A silent understanding of mutual loathing.",
+            fantasy: "BEHOLD! The Great Hall lies before me. The Throne of Endless Comfort awaits its rightful occupant. A demon yet stirs within the Arcane Scrying Mirror. The very air HUMS with peril and snacks.",
+            reality: "The living room. Pizza on the table. Cartoons on the TV. The penguin plushie is on my throne again. I shall deal with this.",
         },
         hotspots: [
+            // Couch / Throne of Endless Comfort
             {
-                id: 'wyrm',
-                x: 70, y: 42, w: 10, h: 38,
-                labelFantasy: "Dust Wyrm Mor'thrax",
-                labelReality: 'Upright Vacuum Cleaner',
+                id: 'throne',
+                x: 16, y: 50, w: 28, h: 28,
+                labelFantasy: 'Throne of Endless Comfort',
+                labelReality: 'The Green Couch',
                 look: {
-                    fantasy: "Mor'thrax, eater of fur and whispers. Its single glassy eye glints. Its iron hide gleams. It MUST be vanquished, or the Sanctum shall never know peace.",
-                    reality: "An upright bagless vacuum. It hums faintly when plugged in, which is approximately the worst sound in the universe.",
+                    fantasy: "MY throne. Carved from the verdant hide of a forgotten beast, bestowed upon me at the dawn of my reign. Currently occupied by an impostor.",
+                    reality: "The couch. I have shed exactly six hundred and twelve hairs into it. Each one is a love letter.",
+                },
+            },
+            // Penguin plush
+            {
+                id: 'penguin',
+                x: 32, y: 62, w: 8, h: 16,
+                labelFantasy: 'The False Heir, Pen-Gwyn the Pretender',
+                labelReality: 'Stuffed Penguin Plushie',
+                look: {
+                    fantasy: "Pen-Gwyn. A doll-like usurper placed upon my throne by the Soft Ones. He smiles. He always smiles. He KNOWS.",
+                    reality: "A plushie penguin. He has been here longer than me. The humans love him very much. Suspicious.",
                 },
                 talk: {
-                    fantasy: "I challenge thee, Wyrm! ... It does not deign to answer. Cowardice, perhaps. Or hibernation.",
-                    reality: "You meow at the vacuum. The vacuum does not respond. It rarely does.",
+                    fantasy: "I challenge thee for the throne! ... He maintains his terrible smile. A psychological warrior of the highest order.",
+                    reality: "You meow at the penguin. The penguin does not meow back. You consider this a victory.",
+                },
+            },
+            // Cosmic Window (left)
+            {
+                id: 'window',
+                x: 8, y: 18, w: 24, h: 42,
+                labelFantasy: 'The Cosmic Window',
+                labelReality: 'The Front Window',
+                look: {
+                    fantasy: "Beyond this veil glimmers the Forbidden Realm — where Grumbleknot the Stone Sage stands his eternal watch upon the outer marches.",
+                    reality: "The window. You can see the neighbor's house. The garden gnome is in our yard. He does not move. You respect him.",
+                },
+                use: { goto: 'garden' },
+            },
+            // Bookshelves / Archive of Forbidden Wisdom
+            {
+                id: 'archive',
+                x: 50, y: 26, w: 14, h: 34,
+                labelFantasy: 'Archive of Forbidden Wisdom',
+                labelReality: 'The Bookshelves',
+                look: {
+                    fantasy: "Ten thousand grimoires! Each binds a truth too dread for mortal eyes. I have not read them. But I HAVE knocked them off the shelf, which is similar.",
+                    reality: "Books. So many books. The humans claim to read them. The evidence is mixed.",
+                },
+            },
+            // TV / Arcane Scrying Mirror
+            {
+                id: 'wyrm',
+                x: 60, y: 50, w: 14, h: 18,
+                labelFantasy: 'The Arcane Scrying Mirror',
+                labelReality: 'The Television',
+                look: {
+                    fantasy: "A scrying glass through which the Wyrm of Ill Cartoon broadcasts his taunts! Lightning sigils! A grinning beast! He MUST be banished.",
+                    reality: "The TV. A cartoon penguin is being electrocuted. It's the human girl's favorite show. You do not understand it.",
+                },
+                talk: {
+                    fantasy: "I demand thy retreat, demon of the glass! ... The Wyrm continues his sinister flickering, undeterred.",
+                    reality: "You meow at the TV. The cartoon does not pause. You are not respected in this household.",
                 },
                 useWith: {
                     talisman: {
                         ending: true,
-                        fantasy: "BEHOLD! The Talisman of Ferocity strikes true! The Dust Wyrm Mor'thrax recoils, its iron hide rattling, and collapses to the floorboards in defeat! THE SANCTUM IS SAVED! THE LEGEND GROWS!",
-                        reality: "You drop the catnip-soaked yarn ball at the foot of the vacuum. It teeters slightly and falls over with a thump. You stare at it. It does not get back up. You feel an enormous sense of accomplishment.",
+                        fantasy: "I HURL the Talisman of Ferocity at the Scrying Mirror! The demon's image SHATTERS into static! The Hall is saved! The legend is BEGUN!",
+                        reality: "You drop the catnip-soaked yarn ball at the foot of the TV stand. The yarn ball rolls into the cable. The TV switches off with a soft pop. You are absolutely sure you did that on purpose.",
                     },
                     default: {
-                        fantasy: "The artifact has no purchase upon the Wyrm. I must seek a worthier weapon.",
-                        reality: "You bat the item near the vacuum. The vacuum is unmoved. Literally.",
+                        fantasy: "The relic finds no purchase upon the demon. I shall need a worthier instrument.",
+                        reality: "You bat the item near the TV. The cartoon continues. The penguin continues to be electrocuted.",
                     },
                 },
             },
+            // Lava Lamp / Captured Elemental Flame
             {
-                id: 'couch',
-                x: 18, y: 60, w: 22, h: 22,
-                labelFantasy: 'Shrine of the Forgotten Warriors',
-                labelReality: 'The Couch',
+                id: 'flame',
+                x: 76, y: 44, w: 6, h: 18,
+                labelFantasy: 'Captured Elemental Flame',
+                labelReality: 'The Lava Lamp',
                 look: {
-                    fantasy: "A shrine of woven cloth, where the great heroes of old rested between battles. Their hair-tokens still cling to its hide.",
-                    reality: "The couch. Covered in your fur. The humans don't seem to mind, which is correct.",
+                    fantasy: "A FIRE ELEMENTAL, bottled by some ancient mage and reduced to slow, sullen drifting. I almost feel pity. Almost.",
+                    reality: "The lava lamp. Mesmerising. The humans bought it ironically and now they keep it on all the time. The blobs are slow.",
                 },
-                searchItem: {
-                    item: 'hair_tie',
-                    onceFantasy: "Among the fibers I unearth a Ring of Mortal Weakness — relic of the Soft Ones who came before.",
-                    onceReality: "You dig between the cushions and find a pink hair tie. The girl has been looking for it. You will not tell her.",
+                talk: {
+                    fantasy: "Speak, Flame! Are you bound here against thy will? The Flame replies in slow, blob-shaped grunts. I shall not be the one to free it.",
+                    reality: "You stare at the lava lamp. The lava lamp stares back. Time passes. You forget what you were doing.",
                 },
             },
+            // Coffee table / Altar of Crumbs
+            {
+                id: 'altar_crumbs',
+                x: 34, y: 78, w: 28, h: 18,
+                labelFantasy: 'Altar of Sacred Crumbs',
+                labelReality: 'The Coffee Table',
+                look: {
+                    fantasy: "Behold — an altar laden with offerings: a wheel of cheese-bread, two chalices, and a flat black sigil of summoning. Surely placed here for ME.",
+                    reality: "Coffee table. There's a half-eaten pizza, two glasses, a game controller, and a phone. The humans were here recently. None of it is for you.",
+                },
+            },
+            // Catnip on floor
             {
                 id: 'catnipFloor',
-                x: 45, y: 78, w: 7, h: 5,
+                x: 26, y: 90, w: 8, h: 6,
                 labelFantasy: 'Spilled Pouch of Wild Madness',
                 labelReality: 'Catnip on the Floor',
                 look: {
                     fantasy: "Herbs of the Verdant Frenzy, spilled in some past battle. Their scent calls to the beast within.",
-                    reality: "You knocked over the catnip pouch yesterday. It's still here. Nobody has cleaned it up.",
+                    reality: "You knocked over the catnip pouch yesterday. It's still here. Nobody has cleaned it up. You are not sorry.",
                 },
                 take: {
                     item: 'catnip_pouch',
@@ -188,24 +251,62 @@ export const ROOMS = {
                     onceReality: "You scoop the catnip back into the torn pouch. Your paws tingle.",
                 },
             },
+            // Cat Bed / Royal Nest of Restoration
             {
-                id: 'window',
-                x: 84, y: 18, w: 12, h: 30,
-                labelFantasy: 'Cosmic Portal of Whispering Winds',
-                labelReality: 'Open Window',
+                id: 'royal_nest',
+                x: 76, y: 70, w: 12, h: 14,
+                labelFantasy: 'Royal Nest of Restoration',
+                labelReality: 'My Cat Bed',
                 look: {
-                    fantasy: "A rift in the veil between worlds. Through it I glimpse the Forbidden Realm where the Stone Mage stands eternal vigil.",
-                    reality: "The window is open. You can see the front garden. The garden gnome is out there. He never moves.",
+                    fantasy: "A wicker nest woven by adoring servants, gilded with my own shed fur. To slumber here is to draw strength from a thousand past lives.",
+                    reality: "Your cat bed. You only sleep in it when the humans aren't watching. When they ARE watching, you sleep in the laundry.",
                 },
-                use: { goto: 'garden' },
+                searchItem: {
+                    item: 'hair_tie',
+                    onceFantasy: "Within the Nest I unearth a Ring of Mortal Weakness — relic of the Soft Ones who came before me.",
+                    onceReality: "You dig in your cat bed and discover a pink hair tie. The girl has been looking for it. You consider returning it. You will not.",
+                },
             },
+            // Kitchen doorway / Path to the Food Bowl Temple
             {
-                id: 'doorBed',
-                x: 4, y: 30, w: 6, h: 32,
-                labelFantasy: 'Archway to the Sanctum',
-                labelReality: 'Bedroom Door',
-                look: { fantasy: "The way back to my Sanctum.", reality: "The bedroom is that way." },
-                use: { goto: 'bedroom' },
+                id: 'food_temple',
+                x: 84, y: 26, w: 12, h: 44,
+                labelFantasy: 'Path to the Food Bowl Temple',
+                labelReality: 'The Kitchen Doorway',
+                look: {
+                    fantasy: "The sacred path. Beyond lies the Temple of the Bowl, where the Crunchy Offering manifests at dawn and dusk. I sense the Bowl is empty. THIS IS A CRISIS.",
+                    reality: "The kitchen. Where the food bowl lives. You can see the fridge from here. The fridge is the great gatekeeper. You respect and fear it.",
+                },
+                use: {
+                    fantasy: "I shall not enter the Temple until the demon of the Scrying Mirror is banished. Order matters in legend-craft.",
+                    reality: "Later. You have a TV to deal with first. Priorities.",
+                },
+            },
+            // Staircase / Ascending Path
+            {
+                id: 'upper_realms',
+                x: 92, y: 56, w: 7, h: 30,
+                labelFantasy: 'Ascending Path to the Upper Realms',
+                labelReality: 'The Stairs',
+                look: {
+                    fantasy: "The Ascending Path. Beyond its summit lie the Upper Realms — bedrooms, attics, and the legendary Linen Closet of the Final Trial.",
+                    reality: "The stairs. They go up. You will go up. Eventually. After the pizza is cold.",
+                },
+                use: {
+                    fantasy: "I dare not ascend until the Hall is purified. The Upper Realms shall await Chapter II.",
+                    reality: "Not yet. Plot reasons. (Chapter II awaits.)",
+                },
+            },
+            // Side table (small extra detail)
+            {
+                id: 'side_lamp',
+                x: 2, y: 60, w: 12, h: 22,
+                labelFantasy: 'Pillar of Captured Sunlight',
+                labelReality: 'The Side Table Lamp',
+                look: {
+                    fantasy: "A pillar of captured sunlight, bound by metal and shade. Mortals call upon it when the great star fails them.",
+                    reality: "The lamp. It clicks on when you bump it. You bump it often. It is one of life's little joys.",
+                },
             },
         ],
     },
