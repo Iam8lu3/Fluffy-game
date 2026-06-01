@@ -10,11 +10,13 @@ import MonologueCaption from '../components/game/MonologueCaption';
 import QuestJournal from '../components/game/QuestJournal';
 import EndingOverlay from '../components/game/EndingOverlay';
 import BottomNavBar from '../components/game/BottomNavBar';
+import useAmbientMusic from '../components/game/useAmbientMusic';
 
 export default function Game() {
     const navigate = useNavigate();
     const { state, enterRoom } = useGame();
     const [journalOpen, setJournalOpen] = useState(false);
+    const music = useAmbientMusic(state.room);
 
     useEffect(() => {
         if (!state.visited[state.room]) enterRoom(state.room);
@@ -30,7 +32,7 @@ export default function Game() {
                 <DialogueBox />
             </SceneViewport>
 
-            <BottomNavBar onJournal={() => setJournalOpen(true)} />
+            <BottomNavBar onJournal={() => setJournalOpen(true)} music={music} />
 
             <div className="bottom-hud">
                 <VerbPanel />

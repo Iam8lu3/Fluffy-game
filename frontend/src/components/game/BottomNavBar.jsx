@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../store/GameContext';
 import { CHAPTER_META, ROOMS } from '../../data/chapter1';
 
-export default function BottomNavBar({ onJournal }) {
+export default function BottomNavBar({ onJournal, music }) {
     const navigate = useNavigate();
     const { state, dispatch } = useGame();
     const room = ROOMS[state.room];
@@ -47,6 +47,17 @@ export default function BottomNavBar({ onJournal }) {
                     <span className="nav-btn-glyph">{state.showHotspots ? '◉' : '○'}</span>
                     <span className="nav-btn-label">Hints</span>
                 </button>
+                {music && (
+                    <button
+                        data-testid="music-toggle"
+                        onClick={() => music.setMuted(!music.muted)}
+                        className={`nav-btn ${music.muted ? '' : 'pressed'}`}
+                        title={music.muted ? 'Unmute music' : 'Mute music'}
+                    >
+                        <span className="nav-btn-glyph">{music.muted ? '𝄽' : '♪'}</span>
+                        <span className="nav-btn-label">{music.muted ? 'Music' : 'Music'}</span>
+                    </button>
+                )}
                 <button
                     data-testid="open-journal"
                     onClick={onJournal}

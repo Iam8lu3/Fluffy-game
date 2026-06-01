@@ -60,8 +60,8 @@
     background-position: center;
     transition: opacity 700ms ease, filter 700ms ease;
 }
-.scene-bg.reality { filter: saturate(1.05) contrast(1) brightness(1); }
-.scene-bg.fantasy { filter: hue-rotate(-22deg) saturate(1.35) contrast(1.12) brightness(0.88); }
+.scene-bg.reality { filter: none; }
+.scene-bg.fantasy { filter: none; }
 
 /* Magic overlay shown only in fantasy mode — sparkles + purple bloom */
 .scene-magic-overlay {
