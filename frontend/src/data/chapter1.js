@@ -75,23 +75,194 @@ export const ROOMS = {
         spawnX: 38,
         onEnterMonologue: {
             once: true,
-            fantasy: "I have risen. The Sanctum is dim and orderly, as it should be. There is work to do today, and I am the only one in this house qualified to do it.",
-            reality: "Morning. The humans are still asleep upstairs. The blanket is still warm where I slept. I have a great deal to attend to before breakfast.",
+            fantasy: "I have risen. The Sanctum holds. The Daylight Beacon has begun to climb the Window of Hours, and there is much to inspect.",
+            reality: "Morning. The humans are still asleep. The blanket is still warm where I slept. I have a great deal to attend to before breakfast.",
         },
         hotspots: [
+            // Door — RIGHT side, opens to the Great Hall
             {
-                id: 'altar',
-                x: 18, y: 60, w: 9, h: 14,
+                id: 'doorLiving',
+                x: 81, y: 53, w: 19, h: 47,
+                labelFantasy: 'Threshold to the Great Hall',
+                labelReality: 'The Bedroom Door',
+                look: {
+                    fantasy: [
+                        "The Threshold. Beyond it lies the Great Hall, where the day's true business begins.",
+                        "Its brass handle bears the warmth of many openings. I respect it.",
+                    ],
+                    reality: [
+                        "The bedroom door. Slightly ajar. The dad never closes it all the way.",
+                        "I can smell the leftover pizza from the living room. Faintly. Persistently.",
+                    ],
+                },
+                use: { goto: 'livingroom' },
+            },
+            // Window
+            {
+                id: 'window',
+                x: 46, y: 33, w: 35, h: 37,
+                labelFantasy: 'The Window of Hours',
+                labelReality: 'The Window',
+                look: {
+                    fantasy: [
+                        "The Window of Hours. Through it I observe the small kingdoms of the world.",
+                        "A flock of sparrows performs its morning circuit. They believe they have escaped me. They have not. They are merely deferred.",
+                    ],
+                    reality: [
+                        "The window. The garden is below. The gnome is in his spot.",
+                        "Two sparrows on the fence. They have not noticed me. Yet.",
+                    ],
+                },
+            },
+            // Curtain Left
+            {
+                id: 'curtain_left',
+                x: 41, y: 43, w: 7, h: 44,
+                labelFantasy: 'Left Veil of the Window',
+                labelReality: 'The Left Curtain',
+                look: {
+                    fantasy: "A veil of green and white, drawn back by mortal hands at first light. I approve of the choice.",
+                    reality: "The left curtain. Polka dots. The mom made these herself. The dad called them 'a little much.' The mom did not respond.",
+                },
+            },
+            // Curtain Right
+            {
+                id: 'curtain_right',
+                x: 75, y: 43, w: 7, h: 44,
+                labelFantasy: 'Right Veil of the Window',
+                labelReality: 'The Right Curtain',
+                look: {
+                    fantasy: "The right veil. Twin to its sister. Held back by a cord of gold.",
+                    reality: "The right curtain. Same polka dots. I have climbed these. Once. There were consequences.",
+                },
+            },
+            // Sunrise
+            {
+                id: 'sunrise',
+                x: 52, y: 36, w: 22, h: 22,
+                labelFantasy: 'The Daylight Beacon',
+                labelReality: 'The Morning Sun',
+                look: {
+                    fantasy: [
+                        "The Daylight Beacon. It climbs the sky on a schedule even I cannot improve upon.",
+                        "Its first warmth lands upon the foot of my bed. This is by ancient arrangement.",
+                    ],
+                    reality: [
+                        "Sunrise. The good orange kind. The one that makes the wood floor glow.",
+                        "If I sit on the rug at exactly 7:21, the light hits me perfectly. The mom always notices. I never let her catch me posing.",
+                    ],
+                },
+            },
+            // Bed
+            {
+                id: 'bed',
+                x: 25, y: 59, w: 50, h: 27,
+                labelFantasy: 'Throne of Returning Dreams',
+                labelReality: 'The Big Bed',
+                look: {
+                    fantasy: [
+                        "The Throne where dreams return to me each dusk. I am the only one who knows where the warm patch is.",
+                        "A great battle was fought here last winter. The opposing forces lost. (It was a moth.)",
+                    ],
+                    reality: [
+                        "The bed. The humans sleep here. I sleep here in the gap between them, which I have carefully measured.",
+                        "There's a tuft of my fur on the green pillow. I tolerate this evidence of my reign being shared.",
+                    ],
+                },
+                use: {
+                    fantasy: "I shall not return to the Throne. There is too much to be done today.",
+                    reality: "Not now. If I get back on the bed I will not get up again. The day must continue.",
+                },
+            },
+            // Pillows (head)
+            {
+                id: 'pillows',
+                x: 27, y: 48, w: 19, h: 14,
+                labelFantasy: 'The Twin Cloud-Cushions',
+                labelReality: 'The Head Pillows',
+                look: {
+                    fantasy: "Two cloud-cushions. The left one bears my impression. This is correct and just.",
+                    reality: "The pillows. The mom's is on the left. I sleep on the dad's. He never says anything about it.",
+                },
+            },
+            // Accent pillow
+            {
+                id: 'accent_pillow',
+                x: 46, y: 45, w: 8, h: 6,
+                labelFantasy: 'Cushion of the Checkered Truce',
+                labelReality: 'The Green Checkered Pillow',
+                look: {
+                    fantasy: "A cushion of woven peace, placed by an unseen hand. I have not slept upon it. Perhaps I should.",
+                    reality: "The little green pillow. The mom got it because 'the bed needed a pop.' Whatever that means. It does its job, I suppose.",
+                },
+            },
+            // Blanket
+            {
+                id: 'blanket',
+                x: 26, y: 63, w: 49, h: 23,
+                labelFantasy: 'Mantle of Patterned Sleep',
+                labelReality: 'The Duvet',
+                look: {
+                    fantasy: "A mantle stitched with patterns that move when no one is looking. I know this because I am, in fact, looking.",
+                    reality: "The duvet. Green with white shapes. I have kneaded it for many minutes at a time. The fabric is forgiving.",
+                },
+            },
+            // Plushie / stuffed animal on bed
+            {
+                id: 'plushie_bed',
+                x: 48, y: 44, w: 6, h: 7,
+                labelFantasy: 'The Small Vassal',
+                labelReality: 'The Brown Plushie',
+                look: {
+                    fantasy: [
+                        "A vassal. Small. Sworn to silent service of the household. He does not blink. None of them do.",
+                        "He is not Pen-Gwyn — that is a separate matter, in a separate room. They have not yet met. They never will, if I have anything to say about it.",
+                    ],
+                    reality: [
+                        "A small brown plushie. He's been here since the girl was tiny. The girl moved on. He did not.",
+                        "He still has his original tag. The dad respects this.",
+                    ],
+                },
+                talk: {
+                    fantasy: "I greet thee, small vassal. Thy silence is noted. Thy loyalty is presumed.",
+                    reality: "I touch noses with the plushie. The plushie does not respond. We are friends.",
+                },
+            },
+            // Cat Tree
+            {
+                id: 'cat_tree',
+                x: 6, y: 52, w: 18, h: 48,
+                labelFantasy: 'The Spire of Vigilance',
+                labelReality: 'The Cat Tree',
+                look: {
+                    fantasy: [
+                        "The Spire of Vigilance, from whose summit I watch the kingdom for trespasses both real and imagined.",
+                        "The dad assembled it. There was a great deal of mortal frustration. I observed without commenting. This was wise.",
+                    ],
+                    reality: [
+                        "My cat tree. Three levels. The top perch has my impression worn into it.",
+                        "The scratching post is a little frayed. This is the natural order. The mom is not allowed to replace it.",
+                    ],
+                },
+                use: {
+                    fantasy: "Not yet. The Spire is for sentry duty, not for the hour of waking.",
+                    reality: "I'll climb it later. For atmospheric reasons.",
+                },
+            },
+            // Nightstand
+            {
+                id: 'nightstand',
+                x: 18, y: 65, w: 11, h: 24,
                 labelFantasy: 'My Altar of First Light',
                 labelReality: 'The Nightstand',
                 look: {
                     fantasy: [
                         "My altar. Where the first thought of each morning is laid. I left a Whisker of First Vow upon it last week, when the moon was right.",
-                        "The lamp atop the altar is unlit. I have, on occasion, lit it by accident with my tail. The humans were impressed.",
+                        "Its single drawer has not opened in my lifetime. Some doors are not for cats.",
                     ],
                     reality: [
-                        "The nightstand. There's a glass of water and an alarm clock. The clock has been wrong by four minutes for two years. Nobody fixes it.",
-                        "On top: my whisker, which I shed last Tuesday. They have not moved it. They will not move it. It is mine now.",
+                        "The nightstand. The drawer sticks. The dad has been meaning to fix it.",
+                        "There's a ring of dried-up water from a glass. The mom has been pretending not to see it.",
                     ],
                 },
                 take: {
@@ -100,57 +271,126 @@ export const ROOMS = {
                     onceReality: "I take the whisker. Now it is officially in my possession. (It was always in my possession.)",
                 },
             },
+            // Alarm clock
             {
-                id: 'bed',
-                x: 48, y: 55, w: 30, h: 30,
-                labelFantasy: 'Throne of Returning Dreams',
-                labelReality: 'The Big Bed',
+                id: 'alarm_clock',
+                x: 22, y: 59, w: 5, h: 6,
+                labelFantasy: 'The Counting Stone',
+                labelReality: 'The Red Alarm Clock',
                 look: {
                     fantasy: [
-                        "The Throne where dreams return to me each dusk. I am the only one who knows where the warm patch is.",
-                        "A great battle was fought here last winter against an invader I shall not name. (It was a moth. The moth lost.)",
+                        "The Counting Stone, which ticks the household's small ceremonies into being.",
+                        "It is wrong by four minutes. I sense this. It has been wrong by four minutes for two years.",
                     ],
                     reality: [
-                        "The bed. The humans sleep here. I sleep here in the gap between them, which I have carefully measured.",
-                        "There's a tuft of my fur on the blue pillow. I tolerate this evidence of my reign being shared.",
+                        "The alarm clock. Red. Boxy. Older than the mom's car.",
+                        "It's been four minutes fast since the power went out two summers ago. Nobody has reset it. They've all adjusted.",
                     ],
                 },
                 use: {
-                    fantasy: "I shall not return to the Throne. There is too much to be done today.",
-                    reality: "Not now. If I get back on the bed I will not get up again, and the day must continue.",
+                    fantasy: "I shall not interfere with the Counting Stone. Its drift is now part of the household covenant.",
+                    reality: "If I bat at the buttons the mom will assume the dad messed with it. Tempting. I refrain. For now.",
                 },
             },
+            // Lamp
             {
-                id: 'window',
-                x: 78, y: 18, w: 14, h: 38,
-                labelFantasy: 'The Window of Hours',
-                labelReality: 'The Bedroom Window',
+                id: 'lamp_nightstand',
+                x: 19, y: 55, w: 6, h: 11,
+                labelFantasy: 'Pillar of Captured Sunlight',
+                labelReality: 'The Bedside Lamp',
+                look: {
+                    fantasy: "Captured sunlight, bound in shade and base. The mortals call it forth when the great star has retired.",
+                    reality: "The lamp. The shade is a little tilted. I tilt it. The dad straightens it. We have a rhythm.",
+                },
+                use: {
+                    fantasy: "I shall not summon the captured sun. The Daylight Beacon already attends us.",
+                    reality: "It's daytime. The lamp is for emergencies. (And emergencies are rare.)",
+                },
+            },
+            // Glass of water
+            {
+                id: 'glass_water',
+                x: 26, y: 63, w: 3, h: 5,
+                labelFantasy: 'Chalice of the Held Lake',
+                labelReality: 'A Glass of Water',
                 look: {
                     fantasy: [
-                        "Through the Window of Hours I see the world wake. The garden gnome is at his post. He is always at his post.",
-                        "A small flock of sparrows performs its morning circuit. They believe they have escaped me. They have not. They are merely deferred.",
+                        "A chalice, holding a small still lake. Sworn to the dad. He drinks from it in the night.",
+                        "The lake remembers being a cloud. I respect this lineage.",
                     ],
                     reality: [
-                        "The window. The garden is below, with the gnome standing exactly where he stood yesterday.",
-                        "Two sparrows on the fence. They have not noticed me. Yet.",
+                        "The dad's water glass. He always leaves it here. The mom always sighs.",
+                        "If I tip it now the dad will blame the mom. If I tip it tonight he'll blame himself. The math suggests waiting.",
                     ],
                 },
             },
+            // Books under bed
             {
-                id: 'doorLiving',
-                x: 4, y: 22, w: 10, h: 60,
-                labelFantasy: 'Threshold to the Great Hall',
-                labelReality: 'The Bedroom Door',
+                id: 'books_under',
+                x: 36, y: 84, w: 8, h: 3,
+                labelFantasy: 'The Hidden Tomes',
+                labelReality: 'Two Books Under the Bed',
                 look: {
-                    fantasy: "Beyond this threshold lies the Great Hall, where the day's true business begins.",
-                    reality: "The door is open. The living room is through there. I can smell that someone left the pizza box out.",
+                    fantasy: [
+                        "Two tomes, kept where mortals will not see them. The red holds knowledge. The brown holds dust.",
+                        "I shall not disturb the tomes. Their concealment is part of their power.",
+                    ],
+                    reality: [
+                        "Two books. The mom hid them when she 'cleaned' before the in-laws came. They're still under there.",
+                        "I have walked past them a hundred times. I let them keep their secret.",
+                    ],
                 },
-                use: { goto: 'livingroom' },
             },
+            // Dresser
             {
-                id: 'drawings',
-                x: 33, y: 22, w: 12, h: 14,
-                labelFantasy: 'The Children\'s Prophecies',
+                id: 'dresser',
+                x: 67, y: 57, w: 17, h: 25,
+                labelFantasy: 'The Wardrobe of Memory',
+                labelReality: 'The Dresser',
+                look: {
+                    fantasy: [
+                        "A great wardrobe in which the family's seasons are folded. I have not opened it. Nor will I — out of dignity, mostly.",
+                        "The top is a small portrait gallery. I am, regrettably, not depicted. The omission shall be corrected in due course.",
+                    ],
+                    reality: [
+                        "The dresser. The dad's socks are in the top drawer. They are in pairs. This is not a guarantee — it is an aspiration.",
+                        "On top: photos. None of me. I'm watching this trend.",
+                    ],
+                },
+            },
+            // Family photos cluster
+            {
+                id: 'family_photos',
+                x: 68, y: 49, w: 16, h: 7,
+                labelFantasy: 'The Gallery of Lineage',
+                labelReality: 'The Family Photos',
+                look: {
+                    fantasy: [
+                        "Five small portraits. They depict the household. They do not depict me. This is being looked into.",
+                        "In the third frame, the girl was very small. The cat she held was not me. I do not ask questions.",
+                    ],
+                    reality: [
+                        "Family photos. The mom's parents on the left. The dad's mom in the middle. The girl as a baby on the right.",
+                        "There used to be a sixth frame. The dad will not say what happened to it.",
+                    ],
+                },
+            },
+            // Wall art (above dresser)
+            {
+                id: 'wall_art',
+                x: 68, y: 44, w: 8, h: 6,
+                labelFantasy: 'The Domestic Icon',
+                labelReality: 'A Framed Print',
+                look: {
+                    fantasy: "An icon of the family arts. A figure tends to a smaller figure. The composition is, I admit, moving.",
+                    reality: "A little print of a mother and a baby. The mom got it at a market years ago. It has not moved since.",
+                },
+            },
+            // Drawings (left wall, above cat tree)
+            {
+                id: 'drawings_left',
+                x: 15, y: 36, w: 15, h: 10,
+                labelFantasy: 'The Younglings\' Prophecies',
                 labelReality: 'Crayon Drawings Taped to the Wall',
                 look: {
                     fantasy: [
@@ -161,6 +401,98 @@ export const ROOMS = {
                         "The girl drew these. There are three of me, two of the dad, and one of a triceratops. The triceratops is wearing my collar.",
                         "She got the bell right. She always remembers the bell.",
                     ],
+                },
+            },
+            // Drawings (right wall, near door)
+            {
+                id: 'drawings_right',
+                x: 83, y: 37, w: 10, h: 9,
+                labelFantasy: 'The Younglings\' Other Prophecies',
+                labelReality: 'More Crayon Drawings',
+                look: {
+                    fantasy: [
+                        "Further prophecies. These depict an alleged rabbit. I sense no rabbit nearby. The youngling speaks of futures.",
+                        "Time, perhaps, will produce the rabbit. I shall be ready.",
+                    ],
+                    reality: [
+                        "The girl drew two rabbits. We do not have a rabbit. The mom thinks it's a hint.",
+                        "The dad thinks it is, quote, 'definitely a hint.'",
+                    ],
+                },
+            },
+            // Desk + laptop
+            {
+                id: 'laptop',
+                x: 59, y: 87, w: 17, h: 8,
+                labelFantasy: 'Tome of the Forbidden Hour',
+                labelReality: 'The Open Laptop',
+                look: {
+                    fantasy: [
+                        "An ancient grimoire, its single sigil glowing blue. To open it would be to glimpse forbidden hours.",
+                        "Sitting upon it is a sacred act. I shall do it later, in private.",
+                    ],
+                    reality: [
+                        "The laptop. The dad left it open. The screen will go dark in two minutes.",
+                        "I have stepped on the keyboard before. He has not forgiven me, exactly, but he has filed it.",
+                    ],
+                },
+                use: {
+                    fantasy: "The Tome holds. I shall not yet seek its hour.",
+                    reality: "If I walk across it now, the dad's important document will become a noodle. I am tempted. I refrain.",
+                },
+            },
+            // Desk
+            {
+                id: 'desk',
+                x: 55, y: 84, w: 29, h: 12,
+                labelFantasy: 'The Plinth of the Tome',
+                labelReality: 'The Desk',
+                look: {
+                    fantasy: "A plinth upon which the household's small labors are arrayed.",
+                    reality: "The desk. The dad works here when 'he just needs ten minutes.' His ten minutes are negotiable.",
+                },
+            },
+            // Wooden chest
+            {
+                id: 'wooden_chest',
+                x: 87, y: 90, w: 6, h: 8,
+                labelFantasy: 'The Reliquary',
+                labelReality: 'A Small Wooden Box',
+                look: {
+                    fantasy: [
+                        "A reliquary, bound in metal. Within: small ancestral artifacts of unknown name.",
+                        "It has not been opened in many seasons. I respect the closure.",
+                    ],
+                    reality: [
+                        "The little wooden box. The mom keeps spare keys in it. The dad does not know this.",
+                        "If I knock it off the dad will spend an hour looking. I am, again, tempted.",
+                    ],
+                },
+            },
+            // Rug
+            {
+                id: 'rug',
+                x: 45, y: 79, w: 22, h: 16,
+                labelFantasy: 'The Round of Welcome',
+                labelReality: 'The Round Rug',
+                look: {
+                    fantasy: "A round of welcome, soft beneath the paw. It marks the place where the day truly begins.",
+                    reality: "The rug. Soft. The exact spot where the morning sun lands at 7:21. I have made this my own.",
+                },
+                use: {
+                    fantasy: "I shall stand upon the Round at the appointed hour.",
+                    reality: "Not yet 7:21. I'll be back.",
+                },
+            },
+            // Ceiling lamp
+            {
+                id: 'ceiling_lamp',
+                x: 49, y: 12, w: 6, h: 7,
+                labelFantasy: 'The High Star',
+                labelReality: 'The Pendant Light',
+                look: {
+                    fantasy: "The High Star. Hangs above all matters. Cold by day, warm by night, indifferent in both.",
+                    reality: "The hanging light. The dad got it on the third trip to that store he hates.",
                 },
             },
         ],
