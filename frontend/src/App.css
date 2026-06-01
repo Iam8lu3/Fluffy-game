@@ -328,6 +328,63 @@
 
 .top-hud { display: none; }
 
+/* Credits scroll */
+.credits-scroll { scroll-behavior: smooth; }
+.credits-section { margin: 36px 0; }
+.credits-section:first-of-type { margin-top: 8px; }
+.credits-rule {
+    width: 70px; height: 1px;
+    margin: 4px auto 0;
+    background: linear-gradient(90deg, transparent, var(--fl-gold), transparent);
+    opacity: 0.7;
+}
+.credits-rule::after {
+    content: '✦';
+    display: block;
+    color: var(--fl-candle-soft);
+    text-shadow: 0 0 8px rgba(255,176,66,0.4);
+    transform: translateY(-9px);
+    font-size: 0.8rem;
+}
+.credits-body { margin-top: 12px; }
+.credits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    text-align: center;
+}
+.credits-list li {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--fl-light);
+}
+.credits-name {
+    font-family: 'IM Fell English SC', serif;
+    letter-spacing: 0.08em;
+    color: var(--fl-candle-soft);
+}
+.credits-note { color: rgba(239,229,213,0.65); font-style: italic; }
+.credits-reserved {
+    font-family: 'IM Fell English SC', serif;
+    letter-spacing: 0.22em;
+    color: rgba(239,229,213,0.35);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+.credits-link {
+    color: var(--fl-candle-soft);
+    text-decoration: underline;
+    text-decoration-color: rgba(255,176,66,0.4);
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.credits-link:hover {
+    color: #fff;
+    text-decoration-color: var(--fl-candle);
+}
+
 /* dialogue overlay panel — sits near bottom of scene area */
 .dialogue-overlay {
     position: absolute;
