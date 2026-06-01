@@ -16,7 +16,7 @@ export default function Game() {
     const navigate = useNavigate();
     const { state, enterRoom } = useGame();
     const [journalOpen, setJournalOpen] = useState(false);
-    const music = useAmbientMusic(state.room);
+    const music = useAmbientMusic(state.room, state.mode);
 
     useEffect(() => {
         if (!state.visited[state.room]) enterRoom(state.room);
@@ -40,6 +40,7 @@ export default function Game() {
                 <RoomMap currentRoom={state.room} />
             </div>
 
+            {state.transitioning && <div className="room-transition" data-testid="room-transition" />}
             {journalOpen && <QuestJournal onClose={() => setJournalOpen(false)} />}
             {state.chapterDone && <EndingOverlay onMenu={() => navigate('/')} />}
         </div>

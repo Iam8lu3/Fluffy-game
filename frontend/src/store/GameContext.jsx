@@ -18,11 +18,17 @@ const initialState = {
     dialogue: null,
     fluffyPos: 30,
     fluffyFacing: 'right',
+    fluffyAction: 'idle', // idle | walking | examine | touch | talk | take | sit | groom
     showHotspots: false,
+    transitioning: false,
 };
 
 function reducer(state, action) {
     switch (action.type) {
+        case 'SET_FLUFFY_ACTION':
+            return { ...state, fluffyAction: action.action };
+        case 'SET_TRANSITIONING':
+            return { ...state, transitioning: action.value };
         case 'TOGGLE_HOTSPOT_HINTS':
             return { ...state, showHotspots: !state.showHotspots };
         case 'TOGGLE_MODE':
@@ -99,17 +105,27 @@ export function GameProvider({ children }) {
     const pickMode = useCallback((variant, count = 0) => pickByCount(state.mode === 'fantasy' ? variant.fantasy : variant.reality, count), [state.mode]);
 
     const enterRoom = useCallback((roomId) => {
-        dispatch({ type: 'GOTO_ROOM', room: roomId });
-        const room = ROOMS[roomId];
-        if (!room) return;
-        const key = `enter_${roomId}`;
-        if (room.onEnterMonologue) {
-            if (room.onEnterMonologue.once && state.seenMonologue[key]) return;
-            const text = state.mode === 'fantasy' ? room.onEnterMonologue.fantasy : room.onEnterMonologue.reality;
-            pushLog({ kind: 'mono', text });
-            dispatch({ type: 'SEEN_MONO', key });
-        }
+        // Fade-to-black transition
+        dispatch({ type: 'SET_TRANSITIONING', value: true });
+        setTimeout(() => {
+            dispatch({ type: 'GOTO_ROOM', room: roomId });
+            const room = ROOMS[roomId];
+            if (room) {
+                const key = `enter_${roomId}`;
+                if (room.onEnterMonologue && !(room.onEnterMonologue.once && state.seenMonologue[key])) {
+                    const text = state.mode === 'fantasy' ? room.onEnterMonologue.fantasy : room.onEnterMonologue.reality;
+                    pushLog({ kind: 'mono', text });
+                    dispatch({ type: 'SEEN_MONO', key });
+                }
+            }
+            setTimeout(() => dispatch({ type: 'SET_TRANSITIONING', value: false }), 60);
+        }, 380);
     }, [pushLog, state.mode, state.seenMonologue]);
+
+    const triggerAction = useCallback((action, durationMs = 900) => {
+        dispatch({ type: 'SET_FLUFFY_ACTION', action });
+        setTimeout(() => dispatch({ type: 'SET_FLUFFY_ACTION', action: 'idle' }), durationMs);
+    }, []);
 
     const interact = useCallback((roomId, hotspotId) => {
         const room = ROOMS[roomId];
@@ -122,6 +138,10 @@ export function GameProvider({ children }) {
         // Move Fluffy toward the hotspot before the response
         const targetX = Math.max(6, Math.min(94, hs.x + hs.w / 2));
         dispatch({ type: 'SET_FLUFFY_POS', pos: targetX });
+
+        // Map verb → character action animation
+        const actionByVerb = { look: 'examine', use: 'touch', talk: 'talk', take: 'take' };
+        triggerAction(actionByVerb[verb] || 'idle', 900);
 
         // movement (use on door)
         if (verb === 'use' && hs.use && hs.use.goto && !state.selectedItem) {
