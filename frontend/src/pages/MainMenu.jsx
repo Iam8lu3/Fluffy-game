@@ -111,8 +111,32 @@ export default function MainMenu() {
                 </div>
 
                 <div className="hidden md:flex col-span-5 relative items-end justify-center pb-12 pointer-events-none">
-                    <div className="candle-decor flicker" style={{ right: '22%', bottom: '32%' }} />
-                    <div className="candle-decor flicker" style={{ right: '34%', bottom: '24%' }} />
+                    <div className="candle-decor flicker" style={{ right: '22%', bottom: '62%' }} />
+                    <div className="candle-decor flicker" style={{ right: '34%', bottom: '54%' }} />
+
+                    {/* Tip-the-Cat QR — in-character donation card */}
+                    <a
+                        href="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/mqmyz40p_image.png"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-testid="tip-the-cat-qr"
+                        className="absolute right-10 bottom-12 pointer-events-auto group block"
+                    >
+                        <div className="qr-card">
+                            <div className="qr-card-header">
+                                <span className="qr-card-title">Offerings</span>
+                                <span className="qr-card-sub">{isFantasy ? 'tribute to the Demon Destroyer' : 'tip the cat, if you like'}</span>
+                            </div>
+                            <div className="qr-card-image">
+                                <img
+                                    src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/mqmyz40p_image.png"
+                                    alt="Tip the Cat — scan to donate"
+                                    draggable={false}
+                                />
+                            </div>
+                            <div className="qr-card-footer">— scan with thy device —</div>
+                        </div>
+                    </a>
                 </div>
             </div>
 

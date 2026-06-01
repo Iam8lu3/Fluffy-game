@@ -12,8 +12,8 @@ export const ASSETS = {
     garden:       'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a103dc004177d2f34d73dcb9cc585c689d078e8540c649692c15d38b0daa2464.png',
     // Fantasy artwork — Fluffy's reinterpretation, same layouts re-skinned
     bedroomFantasy:    'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/3bbf57e6fe9a33dd6162c457f6440108c1c01247e31e9f5e498a2f964080a1a8.png',
-    livingroomFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/9dc9244cb06d3489954b6398dcd4e85bf407ffe145abb92addafcae56a0cdb65.png',
-    gardenFantasy:     'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/01c527444c66353a9cdbbf017794f1dc75af3548b1a0b7104d93deafd7af0058.png',
+    livingroomFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/d0be13ea7a3f73b39fd92d201383b61d5885a79f00e55ef757d93d5385f5c318.png',
+    gardenFantasy:     'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/5a3cf736b27bbdb2786f382c565606f6bba3036e573232174df4c283c04942fe.png',
     portraitFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/502fe4e92af9d6facecf8b4ffc4f0023b324ba0ec5aa10fe76a0875c5746d22c.png',
     portraitReality: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/41a170430063921ba188d8ead4ca03cae7475b6be0c6ab17ac0f0c9d9590afb1.png',
     menuBg: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a199ba31e0c1f11e9a95f17923d3991a7ef30a767a2b6749b51f14e0daeefcc3.png',
