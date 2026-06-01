@@ -1,12 +1,14 @@
 import React from 'react';
 
 // === EASY-EDIT REGISTRY ===
-// As people donate, add their names below. Order matters (top = most recent).
-// Pass each as { name, tier, note }. tier is one of 'honored' | 'patron'.
+// As supporters come in, add their names below. Order matters (top = most recent).
+// Each entry: { name, tier, note }
+//   tier: 'honored' = one-time PayPal supporters (appears in "Honored Supporters")
+//   tier: 'patron'  = recurring Patreon members  (appears in "Patrons of the Realm")
+//   note (optional) = italic descriptor shown after the name (e.g. "first offering")
 const SUPPORTERS = [
-    // Example entry (uncomment & replace as donations come in):
-    // { name: 'Jane Doe',     tier: 'honored', note: 'first to bring the offering' },
-    // { name: 'A Kind Stranger', tier: 'patron'  },
+    // { name: 'Jane Doe',         tier: 'honored', note: 'first to bring the offering' },
+    // { name: 'A Kind Stranger',  tier: 'patron'  },
 ];
 
 const HONORED = SUPPORTERS.filter(s => s.tier === 'honored');
@@ -57,7 +59,14 @@ export default function CreditsModal({ onClose }) {
                         <Cast role="The Food Bowl"                as="as Destiny" />
                     </Section>
 
-                    <Section title="Honored Supporters" subtitle="The brave souls who contributed offerings to the Apartment Kingdom.">
+                    <Section title="A Note on Offerings" subtitle="Any tribute, however small, earns a place in the scrolls below.">
+                        <P className="text-sm">
+                            Single offerings made via <a className="credits-link" href="https://www.paypal.com/ncp/payment/EQJTSHCLFFSAQ" target="_blank" rel="noopener noreferrer">PayPal</a> are recorded under <span className="text-[var(--fl-candle-soft)]">Honored Supporters</span>.<br/>
+                            Recurring tribute via <a className="credits-link" href="https://www.patreon.com/c/fluffyninelegends" target="_blank" rel="noopener noreferrer">Patreon</a> earns a name in <span className="text-[var(--fl-candle-soft)]">Patrons of the Realm</span>.
+                        </P>
+                    </Section>
+
+                    <Section title="Honored Supporters" subtitle="One-time offerings to the Apartment Kingdom. (PayPal donors.)">
                         {HONORED.length === 0 && reservedSlots === 0 && (
                             <P className="opacity-70 italic">Supporter names will appear here in future updates.</P>
                         )}
@@ -74,9 +83,9 @@ export default function CreditsModal({ onClose }) {
                         </ul>
                     </Section>
 
-                    <Section title="Patrons of the Realm" subtitle="For those who helped keep the kingdom running.">
+                    <Section title="Patrons of the Realm" subtitle="Those who keep the kingdom running. (Patreon members — monthly tribute.)">
                         {PATRONS.length === 0
-                            ? <P className="opacity-70 italic">Future donor names will be listed here.</P>
+                            ? <P className="opacity-70 italic">Patreon members' names will be inscribed here.</P>
                             : <ul className="credits-list">
                                 {PATRONS.map((s, i) => (
                                     <li key={`p-${i}`}>
@@ -86,6 +95,9 @@ export default function CreditsModal({ onClose }) {
                                 ))}
                               </ul>
                         }
+                        <p className="font-dialogue italic text-[var(--fl-light)]/65 text-sm mt-4">
+                            <a className="credits-link" href="https://www.patreon.com/c/fluffyninelegends" target="_blank" rel="noopener noreferrer">patreon.com/c/fluffyninelegends</a>
+                        </p>
                     </Section>
 
                     <Section title="In Memory Of">

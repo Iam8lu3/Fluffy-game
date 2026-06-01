@@ -114,37 +114,60 @@ export default function MainMenu() {
                     <div className="candle-decor flicker" style={{ right: '22%', bottom: '62%' }} />
                     <div className="candle-decor flicker" style={{ right: '34%', bottom: '54%' }} />
 
-                    {/* Support-the-Demo card — promo art + scannable QR; both clickable, both go to PayPal */}
-                    <a
-                        href="https://www.paypal.com/ncp/payment/EQJTSHCLFFSAQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-testid="tip-the-cat-qr"
-                        className="absolute right-10 bottom-12 pointer-events-auto group block"
-                    >
+                    {/* Support-the-Demo card — PayPal QR + Patreon. Honored credits the donors. */}
+                    <div className="absolute right-10 bottom-12 pointer-events-auto qr-card-wrap" data-testid="support-card">
                         <div className="qr-card">
-                            <div className="qr-promo">
+                            <a
+                                href="https://www.paypal.com/ncp/payment/EQJTSHCLFFSAQ"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-testid="tip-the-cat-qr"
+                                className="qr-promo"
+                            >
                                 <img
                                     src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/rjgeyqs9_712504479_17966153451119856_65797109207246429_n.jpg"
                                     alt="Fluffy — Nine Lives, Nine Legends"
                                     draggable={false}
                                 />
                                 <span className="qr-promo-cta">Support the Demo</span>
-                            </div>
+                            </a>
                             <div className="qr-card-header">
                                 <span className="qr-card-title">Offerings</span>
                                 <span className="qr-card-sub">{isFantasy ? 'tribute to the Demon Destroyer' : 'tip the cat, if you like'}</span>
                             </div>
-                            <div className="qr-card-image">
+                            <a
+                                href="https://www.paypal.com/ncp/payment/EQJTSHCLFFSAQ"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-testid="paypal-link"
+                                className="qr-card-image"
+                                title="Open PayPal"
+                            >
                                 <img
                                     src="https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/wrpz5p2t_qrcode.png"
                                     alt="PayPal — scan to tip the cat"
                                     draggable={false}
                                 />
-                            </div>
-                            <div className="qr-card-footer">— scan or click to PayPal —</div>
+                            </a>
+                            <div className="qr-card-footer">— PayPal · single offering —</div>
+                            <a
+                                href="https://www.patreon.com/c/fluffyninelegends"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-testid="patreon-link"
+                                className="patreon-btn"
+                            >
+                                <span className="patreon-btn-glyph">𝕻</span>
+                                <span className="patreon-btn-text">
+                                    <span className="patreon-btn-title">Join the Patreon</span>
+                                    <span className="patreon-btn-sub">monthly tribute · recurring</span>
+                                </span>
+                            </a>
+                            <p className="qr-card-credit">
+                                {isFantasy ? 'Thy name shall be inscribed in the Codex.' : 'Donors are credited in the Honored Supporters scroll.'}
+                            </p>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
 
