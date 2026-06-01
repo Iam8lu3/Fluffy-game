@@ -69,40 +69,129 @@
     pointer-events: none;
     background:
         radial-gradient(ellipse at 50% 30%, rgba(255,176,66,0.06) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.7) 100%);
+        linear-gradient(180deg, rgba(0,0,0,0.18) 0%, transparent 25%, transparent 70%, rgba(0,0,0,0.55) 100%);
 }
 
-.scene-title {
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    pointer-events: none;
-    font-family: 'IM Fell English SC', serif;
-    color: var(--fl-light);
-    letter-spacing: 0.18em;
-    font-size: 0.78rem;
-    text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 18px rgba(0,0,0,0.95), 0 0 22px rgba(0,0,0,0.85);
-    opacity: 1;
-    padding: 6px 22px;
-    background: linear-gradient(180deg, rgba(11,14,23,0.62), rgba(11,14,23,0.28));
-    border-bottom: 1px solid rgba(255,176,66,0.35);
+/* ----- Parchment Bottom Nav Bar ----- */
+.nav-bar {
+    position: relative;
+    z-index: 22;
+    height: 62px;
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    align-items: stretch;
+    border-top: 1px solid rgba(184,134,11,0.6);
+    border-bottom: 1px solid rgba(184,134,11,0.55);
+    padding: 0 14px;
 }
-.scene-title .title-main {
-    display: block;
-    font-family: 'Pirata One', cursive;
-    font-size: 1.55rem;
-    letter-spacing: 0.1em;
+.nav-section { display: flex; align-items: center; gap: 8px; }
+.nav-left { justify-content: flex-start; }
+.nav-right { justify-content: flex-end; }
+.nav-center {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    text-align: center;
+    line-height: 1;
+}
+.nav-chapter {
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(26, 21, 19, 0.7);
+}
+.nav-location {
+    font-size: 1.5rem;
+    color: var(--fl-blood);
+    letter-spacing: 0.04em;
+    margin-top: 1px;
+}
+.nav-mode-hint {
+    font-style: italic;
+    font-size: 0.74rem;
+    color: rgba(26, 21, 19, 0.65);
+    margin-top: 2px;
+}
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: rgba(11, 14, 23, 0.08);
+    border: 1px solid rgba(184, 134, 11, 0.55);
+    color: var(--fl-ink);
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: all 0.18s ease;
+}
+.nav-btn:hover {
+    background: rgba(184, 134, 11, 0.18);
+    border-color: var(--fl-gold);
+    color: var(--fl-blood);
+}
+.nav-btn.pressed {
+    background: var(--fl-arcane);
     color: var(--fl-candle-soft);
-    text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 16px rgba(0,0,0,0.95), 0 0 22px rgba(255,176,66,0.5);
+    border-color: var(--fl-candle);
+}
+.nav-btn-primary {
+    background: rgba(122, 34, 38, 0.08);
+    border-color: rgba(122, 34, 38, 0.5);
+    color: var(--fl-blood);
+}
+.nav-btn-primary:hover {
+    background: rgba(122, 34, 38, 0.18);
+    color: var(--fl-blood);
+}
+.nav-btn-glyph { font-size: 0.95rem; line-height: 1; }
+.nav-btn-label { line-height: 1; }
+
+/* Mode toggle pill */
+.mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 12px;
+    background: rgba(11, 14, 23, 0.12);
+    border: 1px solid rgba(184, 134, 11, 0.55);
+    color: var(--fl-ink);
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: all 0.18s ease;
+    position: relative;
+}
+.mode-toggle:hover { border-color: var(--fl-gold); }
+.mode-side {
+    color: rgba(26, 21, 19, 0.45);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    line-height: 1;
+}
+.mode-side.active {
+    color: var(--fl-blood);
+    text-shadow: 0 0 8px rgba(255, 176, 66, 0.45);
+}
+.mode-pip {
+    display: inline-block;
+    width: 16px; height: 16px;
+    background: var(--fl-candle);
+    box-shadow: 0 0 10px rgba(255, 176, 66, 0.6);
+    border: 1px solid var(--fl-gold);
+    transition: transform 0.35s ease, background 0.35s ease;
+}
+.mode-toggle.reality .mode-pip {
+    background: #6b9bd6;
+    box-shadow: 0 0 10px rgba(107, 155, 214, 0.6);
 }
 
 .bottom-hud {
     position: relative;
     z-index: 20;
-    height: 220px;
-    border-top: 1px solid rgba(184,134,11,0.5);
+    height: 200px;
     background: linear-gradient(180deg, rgba(7,6,10,0.85), rgba(7,6,10,1));
     display: grid;
     grid-template-columns: 220px 1fr 280px;
@@ -110,24 +199,14 @@
     padding: 12px 18px;
 }
 
-.top-hud {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    z-index: 25;
-    padding: 10px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: none;
-}
-.top-hud > * { pointer-events: auto; }
+.top-hud { display: none; }
 
-/* dialogue overlay panel */
+/* dialogue overlay panel — sits near bottom of scene area */
 .dialogue-overlay {
     position: absolute;
     z-index: 30;
     left: 50%;
-    bottom: 240px;
+    bottom: 24px;
     transform: translateX(-50%);
     width: min(900px, 88%);
     pointer-events: none;

@@ -16,12 +16,15 @@ const initialState = {
     log: [],
     chapterDone: false,
     dialogue: null,
-    fluffyPos: 30, // 0-100 percent
+    fluffyPos: 30,
     fluffyFacing: 'right',
+    showHotspots: false,
 };
 
 function reducer(state, action) {
     switch (action.type) {
+        case 'TOGGLE_HOTSPOT_HINTS':
+            return { ...state, showHotspots: !state.showHotspots };
         case 'TOGGLE_MODE':
             return { ...state, mode: state.mode === 'fantasy' ? 'reality' : 'fantasy' };
         case 'SET_VERB':
