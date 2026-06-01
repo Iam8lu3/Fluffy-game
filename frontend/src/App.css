@@ -16,6 +16,10 @@
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    transition: filter 700ms ease;
+}
+.menu-stage.menu-reality {
+    filter: saturate(0.35) brightness(0.7) hue-rotate(-15deg) contrast(0.95);
 }
 .menu-stage::before {
     content: '';
@@ -23,6 +27,17 @@
     background: linear-gradient(180deg, rgba(7,6,10,0.55) 0%, rgba(7,6,10,0.2) 35%, rgba(7,6,10,0.85) 100%);
     pointer-events: none;
 }
+.menu-stage.menu-reality::before {
+    background: linear-gradient(180deg, rgba(7,6,10,0.7) 0%, rgba(7,6,10,0.5) 35%, rgba(7,6,10,0.92) 100%);
+}
+.menu-mode-toggle {
+    background: rgba(7,6,10,0.55) !important;
+    color: var(--fl-light) !important;
+    border-color: rgba(184,134,11,0.55) !important;
+    backdrop-filter: blur(3px);
+}
+.menu-mode-toggle .mode-side { color: rgba(239,229,213,0.45); }
+.menu-mode-toggle .mode-side.active { color: var(--fl-candle-soft); text-shadow: 0 0 10px rgba(255,176,66,0.55); }
 
 .game-stage {
     position: relative;

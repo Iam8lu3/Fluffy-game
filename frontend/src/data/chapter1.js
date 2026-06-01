@@ -682,14 +682,14 @@ export const COMBOS = {
 export const CHAPTER_META = {
     id: 'ch1',
     number: 'I',
-    titleFantasy: 'The Awakening of the Demon Destroyer',
-    titleReality: 'Tuesday Morning, Approximately',
-    epigraph: '"Nine lives. Nine chapters. The first begins at the food bowl."',
+    titleFantasy: 'The Apartment Kingdom',
+    titleReality: 'Tuesday Morning, Apartment 4B',
+    epigraph: '"Demon Destroyer of Worlds. Guardian of the Apartment Kingdom. The food bowl remains a matter of grave concern."',
     startRoom: 'bedroom',
     endingMonologue: {
-        fantasy: "The Wyrm is silent. The Mirror is dark. The Hall is mine. Eight more days yet to claim — but this one is finished, and finished well.",
-        reality: "The TV is off. The house is quiet again. I sit a moment, where I have done my work. Soon I will check the food bowl. I have earned the check.",
+        fantasy: "The Wyrm is silent. The Mirror is dark. The Apartment Kingdom holds. Eight realms still await me — but this one is finished, and finished well.",
+        reality: "The TV is off. The apartment is quiet again. I sit a moment, where I have done my work. Soon I will check the food bowl. I have earned the check.",
         outro: "— END OF CHAPTER I —",
-        subOutro: "The story continues in Chapter II: 'A Bowl Most Sacred'",
+        subOutro: "The story continues in Chapter II: 'The Food Bowl Temple'",
     },
 };
