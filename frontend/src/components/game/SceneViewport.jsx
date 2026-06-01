@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../../store/GameContext';
+import FluffyCharacter from './FluffyCharacter';
 
 export default function SceneViewport({ room, mode, children }) {
     const { interact } = useGame();
@@ -50,8 +51,10 @@ export default function SceneViewport({ room, mode, children }) {
             {/* Scene title */}
             <div className="scene-title">
                 <span className="title-main">{mode === 'fantasy' ? room.titleFantasy : room.titleReality}</span>
-                <span className="opacity-70">{mode === 'fantasy' ? '— as Fluffy sees it —' : '— what is actually there —'}</span>
+                <span className="opacity-70">{mode === 'fantasy' ? '— as Fluffy understands it —' : '— what is actually there —'}</span>
             </div>
+
+            <FluffyCharacter />
 
             {children}
         </div>
