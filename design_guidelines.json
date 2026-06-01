@@ -1,0 +1,110 @@
+{
+  "theme": "Dark Fantasy Storybook",
+  "domain": "Narrative point-and-click adventure game",
+  "archetype": "5 (Luxury / Cinematic) mixed with warm storybook elements",
+  "colors": {
+    "background_base": "#0B0E17",
+    "surface_parchment": "#F4E7CE",
+    "surface_parchment_dark": "#D5B98A",
+    "primary_candlelight": "#FFB042",
+    "primary_hover": "#FFD18C",
+    "secondary_arcane": "#4A205A",
+    "text_ink": "#1A1513",
+    "text_light": "#EFE5D5",
+    "border_ornate": "#B8860B",
+    "overlay_dark": "rgba(11, 14, 23, 0.85)"
+  },
+  "typography": {
+    "font_families": {
+      "headings": "'IM Fell English', serif",
+      "dialogue": "'Cormorant Garamond', serif",
+      "ui_body": "'Crimson Text', serif",
+      "blackletter": "'Pirata One', cursive"
+    },
+    "rules": {
+      "anti_pattern": "Strictly no Inter, Roboto, or generic sans-serif fonts anywhere.",
+      "headings": "Tracking tight, uppercase or stylized.",
+      "dialogue": "Leading relaxed (1.6+), minimum size text-lg for readability."
+    }
+  },
+  "layout_and_spacing": {
+    "container": "16:9 cinematic aspect ratio centered on screen, maximum height 90vh.",
+    "spacing_scale": "Use generous spacing (p-6, p-8) for dialogue boxes and UI panels. Avoid cramming elements.",
+    "borders": "Interactive panels must feature 1px solid or patterned borders (use the provided ornate border asset) to separate from the dark background.",
+    "alignment": "UI text centered, dialogue text left-aligned with character portrait on the left."
+  },
+  "components": {
+    "main_menu": {
+      "layout": "Full-screen background image (main_menu_bg) with an ornate vertical list of menu buttons centered or left-aligned.",
+      "test_id": "main-menu"
+    },
+    "scene_viewport": {
+      "layout": "Holds the scene backgrounds (scene_fantasy/scene_reality) and layered hotspots. Must manage state of the toggle.",
+      "test_id": "scene-viewport"
+    },
+    "scumm_verb_panel": {
+      "layout": "Grid layout (grid-cols-2 or grid-cols-3) of verb buttons (Look, Use, Talk, Take, Combine) housed in a parchment-styled container.",
+      "test_id": "verb-panel"
+    },
+    "inventory_bar": {
+      "layout": "Flexbox row or grid of dark square slots with subtle gold borders. Placed near the verb panel.",
+      "test_id": "inventory-bar"
+    },
+    "renpy_dialogue_box": {
+      "layout": "Fixed bottom panel spanning 80-90% width. Flex layout with a character portrait (left/right) and dialogue text area. Use the ui_parchment texture as background.",
+      "test_id": "dialogue-box"
+    },
+    "fantasy_reality_toggle": {
+      "layout": "Absolute positioned elegant button (top-right of viewport). Changes state between fantasy (purple/gold) and reality (sepia).",
+      "test_id": "fantasy-toggle"
+    }
+  },
+  "motion_and_interactions": {
+    "transitions": "Smooth 0.5s crossfade between fantasy and reality views.",
+    "hover": "Buttons elevate (-translate-y-1) and gain a soft #FFB042 drop-shadow.",
+    "cursor": "Apply the cursor_paw asset as the default cursor globally, and add an active state for hotspots."
+  },
+  "assets": {
+    "main_menu_bg": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a199ba31e0c1f11e9a95f17923d3991a7ef30a767a2b6749b51f14e0daeefcc3.png",
+      "description": "Hero background for the main title screen."
+    },
+    "scene_fantasy": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/d8532f2a98e95bc5bcad21411802a65be6faa77edd361b8e5f037075098a9d36.png",
+      "description": "Background for Fluffy's fantasy viewpoint."
+    },
+    "scene_reality": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/761104f77de60a97a22ebca05f3ce87db2790d40cb342c61928b6701475f02e2.png",
+      "description": "Background for the mundane reality viewpoint."
+    },
+    "portrait_fluffy_fantasy": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/502fe4e92af9d6facecf8b4ffc4f0023b324ba0ec5aa10fe76a0875c5746d22c.png",
+      "description": "Character portrait for the dialogue box when in fantasy mode."
+    },
+    "portrait_fluffy_reality": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/41a170430063921ba188d8ead4ca03cae7475b6be0c6ab17ac0f0c9d9590afb1.png",
+      "description": "Character portrait for the dialogue box when in reality mode."
+    },
+    "ui_parchment": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/f0193e76ad1ff8166c18bebedd7ed52ad8ba7a7655b5dc3cbc2246e2982ece43.png",
+      "description": "Seamless texture to be used as background for dialogue boxes, journals, and UI panels."
+    },
+    "ui_border": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/ce528c2dec312aeb165c7cde6fdfc967832474b92d97395b6e3fdc3f857b2c5e.png",
+      "description": "Ornate Victorian frame element to decorate UI panels or portraits."
+    },
+    "cursor_paw": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/7825f741926de8bae9234e3e683a74952398b3e65f047f9012a724ef079c947f.png",
+      "description": "Custom mouse cursor for the game."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Must use ONLY the image URLs provided in the assets section. No placeholder services.",
+    "Implement data-testid attributes on ALL interactive UI elements (e.g., data-testid='start-game-btn', data-testid='fantasy-toggle').",
+    "Load 'IM Fell English', 'Cormorant Garamond', 'Crimson Text', and 'Pirata One' via Google Fonts. DO NOT use generic UI fonts like Inter.",
+    "Ensure UI components (SCUMM verbs, Dialogue Box) visually layer over the 16:9 scene viewport without hiding critical scene info.",
+    "Do not use generic Shadcn/Tailwind default styles for the core game UI. Override them to match the dark fantasy storybook aesthetic.",
+    "Use the ui_parchment image as a repeating background (or cover) for panels with text_ink as the font color for readability.",
+    "Use lucide-react or specific SVG icons only for minor UI elements (Settings, Sound), otherwise rely on styled text and borders."
+  ]
+}
