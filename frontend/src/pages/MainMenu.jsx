@@ -5,6 +5,7 @@ import { CHAPTER_META } from '../data/chapter1';
 import SettingsModal from '../components/game/SettingsModal';
 import CreditsModal from '../components/game/CreditsModal';
 import ChaptersModal from '../components/game/ChaptersModal';
+import useAmbientMusic from '../components/game/useAmbientMusic';
 
 const FANTASY_TITLES = [
     'Demon Destroyer of Worlds.',
@@ -27,6 +28,7 @@ export default function MainMenu() {
     const { resetGame } = useGame();
     const [modal, setModal] = useState(null);
     const [view, setView] = useState('fantasy'); // 'fantasy' | 'reality'
+    const music = useAmbientMusic('menu');
 
     const onNew = () => { resetGame(); navigate('/game'); };
     const onContinue = () => { if (hasSave()) navigate('/game'); };
@@ -41,6 +43,15 @@ export default function MainMenu() {
 
             {/* Reality / Fantasy preview chip — establishes the joke immediately */}
             <div className="absolute top-8 right-8 z-20 flex items-center gap-3" data-testid="menu-mode-toggle-wrap">
+                <button
+                    data-testid="menu-music-toggle"
+                    onClick={() => music.setMuted(!music.muted)}
+                    className="nav-btn"
+                    title={music.muted ? 'Unmute music' : 'Mute music'}
+                >
+                    <span className="nav-btn-glyph">{music.muted ? '𝄽' : '♪'}</span>
+                    <span className="nav-btn-label">Music</span>
+                </button>
                 <span className="font-display uppercase tracking-[0.3em] text-[0.65rem] text-[var(--fl-light)]/55 hidden sm:inline">
                     {isFantasy ? 'as Fluffy understands it' : 'what is actually there'}
                 </span>

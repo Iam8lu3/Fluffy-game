@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 // Per-chapter / per-room music. Drop user-uploaded files into /app/frontend/public/audio/
 // and add their paths here. The component is silent until a file is provided.
 const TRACKS = {
-    default:    null,   // will fall back to silence
-    bedroom:    '/audio/bedroom.mp3',     // place file here when uploaded
-    livingroom: '/audio/livingroom.mp3',
-    garden:     '/audio/garden.mp3',
-    menu:       '/audio/menu.mp3',
+    default:    null,
+    menu:       'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/hc20i8mu_The%20Master%20Bedroom%20%E2%80%93%20Just%20After%20Sunrise.mp3',
+    bedroom:    'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/hc20i8mu_The%20Master%20Bedroom%20%E2%80%93%20Just%20After%20Sunrise.mp3',
+    livingroom: null,  // awaiting upload
+    garden:     null,  // awaiting upload
 };
 
 const VOL_KEY = 'fluffy_music_vol';
