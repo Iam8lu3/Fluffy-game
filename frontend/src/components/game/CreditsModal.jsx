@@ -1,4 +1,5 @@
 import React from 'react';
+import { UPCOMING_CHARACTERS } from '../../data/characters';
 
 // === EASY-EDIT REGISTRY ===
 // As supporters come in, add their names below. Order matters (top = most recent).
@@ -57,6 +58,28 @@ export default function CreditsModal({ onClose }) {
                         <Cast role="Grumbleknot the Stone Sage"   as="standing very still" />
                         <Cast role="The Human Servants"           as="doing their best" />
                         <Cast role="The Food Bowl"                as="as Destiny" />
+                    </Section>
+
+                    <Section title="Coming in Later Chapters" subtitle="The Apartment Kingdom is larger than one cat realizes.">
+                        {UPCOMING_CHARACTERS.map(c => (
+                            <div key={c.id} className="upcoming-cast">
+                                <div className="upcoming-cast-portrait" style={{ '--accent': c.accent }}>
+                                    <img src={c.sprite} alt={c.nameReality} draggable={false} />
+                                </div>
+                                <div className="upcoming-cast-body">
+                                    <div className="font-script text-2xl text-[var(--fl-candle-soft)] leading-none">{c.nameFantasy}</div>
+                                    <div className="font-dialogue italic text-[var(--fl-light)]/70 text-sm mt-1">{c.nameReality}</div>
+                                    <P className="text-sm mt-2">{c.bioFantasy}</P>
+                                    <p className="font-dialogue text-[var(--fl-light)]/80 text-sm leading-relaxed mt-1">{c.bioReality}</p>
+                                    {c.oneRule && (
+                                        <p className="font-dialogue italic text-[var(--fl-blood)] text-sm mt-2">{c.oneRule}</p>
+                                    )}
+                                    <p className="font-display uppercase text-[0.62rem] tracking-[0.28em] text-[var(--fl-light)]/55 mt-3">
+                                        First appears: {c.introducedIn}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </Section>
 
                     <Section title="A Note on Offerings" subtitle="Any tribute, however small, earns a place in the scrolls below.">
