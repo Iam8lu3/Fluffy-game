@@ -30,19 +30,19 @@ function resolveTrack(roomId, mode) {
 export default function useAmbientMusic(roomId, mode = 'fantasy') {
     const audioRef = useRef(null);
     const [muted, setMuted] = useState(() => {
-        try { return localStorage.getItem(MUTE_KEY) === '1'; } catch { return false; }
+        try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (err) { console.warn('[Fluffy] music: read mute failed:', err); return false; }
     });
     const [volume, setVolume] = useState(() => {
-        try { const v = Number(localStorage.getItem(VOL_KEY)); return Number.isFinite(v) && v > 0 ? v : 0.45; } catch { return 0.45; }
+        try { const v = Number(localStorage.getItem(VOL_KEY)); return Number.isFinite(v) && v > 0 ? v : 0.45; } catch (err) { console.warn('[Fluffy] music: read volume failed:', err); return 0.45; }
     });
 
     useEffect(() => {
-        try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch { /* */ }
+        try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (err) { console.warn('[Fluffy] music: write mute failed:', err); }
         if (audioRef.current) audioRef.current.muted = muted;
     }, [muted]);
 
     useEffect(() => {
-        try { localStorage.setItem(VOL_KEY, String(volume)); } catch { /* */ }
+        try { localStorage.setItem(VOL_KEY, String(volume)); } catch (err) { console.warn('[Fluffy] music: write volume failed:', err); }
         if (audioRef.current) audioRef.current.volume = volume;
     }, [volume]);
 

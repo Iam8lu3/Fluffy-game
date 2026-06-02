@@ -78,8 +78,8 @@ export default function QuestJournal({ onClose }) {
                     {tab === 'log' && (
                         <ol className="space-y-1.5 font-dialogue italic text-[var(--fl-ink)]/85">
                             {state.log.length === 0 && <li className="opacity-60">No entries yet. Strike out into the world.</li>}
-                            {state.log.slice().reverse().map((e, i) => (
-                                <li key={i} className="border-b border-[var(--fl-ink)]/15 pb-1.5">
+                            {state.log.slice().reverse().map((e) => (
+                                <li key={e.ts} className="border-b border-[var(--fl-ink)]/15 pb-1.5">
                                     <span className="font-display uppercase text-[0.62rem] tracking-[0.25em] text-[var(--fl-blood)] mr-2">{e.kind}</span>
                                     {e.text}
                                 </li>

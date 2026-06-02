@@ -20,6 +20,9 @@ export default function Game() {
 
     useEffect(() => {
         if (!state.visited[state.room]) enterRoom(state.room);
+        // Intentionally only runs once on mount — re-running on every visited/room
+        // change would re-fire the entry monologue every time the player walks back
+        // into a room they've already seen.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

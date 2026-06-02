@@ -88,14 +88,20 @@ export function GameProvider({ children }) {
             const raw = localStorage.getItem(SAVE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
-                return { ...initialState, ...parsed };
+                // Light shape validation — discard if the saved object is the wrong type
+                // (corrupt save / older incompatible schema / tampering).
+                if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                    return { ...initialState, ...parsed };
+                }
             }
-        } catch { /* ignore */ }
+        } catch (err) {
+            console.warn('[Fluffy] failed to load save:', err);
+        }
         return { ...initialState, visited: { [CHAPTER_META.startRoom]: true }, fluffyPos: ROOMS[CHAPTER_META.startRoom]?.spawnX ?? 30 };
     });
 
     useEffect(() => {
-        try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch { /* ignore */ }
+        try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (err) { console.warn('[Fluffy] failed to write save:', err); }
     }, [state]);
 
     const quests = useMemo(() => deriveQuestStates(state), [state]);
@@ -267,7 +273,7 @@ export function GameProvider({ children }) {
     }, [pushLog, state.mode]);
 
     const resetGame = useCallback(() => {
-        try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
+        try { localStorage.removeItem(SAVE_KEY); } catch (err) { console.warn('[Fluffy] failed to clear save:', err); }
         dispatch({ type: 'RESET' });
     }, []);
 
@@ -287,5 +293,5 @@ export function useGame() {
 }
 
 export function hasSave() {
-    try { return !!localStorage.getItem(SAVE_KEY); } catch { return false; }
+    try { return !!localStorage.getItem(SAVE_KEY); } catch (err) { console.warn('[Fluffy] failed to check save:', err); return false; }
 }

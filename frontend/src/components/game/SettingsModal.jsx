@@ -6,11 +6,12 @@ const defaults = { textSpeed: 22, volume: 60, parchmentMode: true };
 export default function SettingsModal({ onClose }) {
     const [s, setS] = useState(() => {
         try { return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; }
-        catch { return defaults; }
+        catch (err) { console.warn('[Fluffy] settings load failed:', err); return defaults; }
     });
 
     useEffect(() => {
-        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* */ }
+        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
+        catch (err) { console.warn('[Fluffy] settings save failed:', err); }
     }, [s]);
 
     return (
