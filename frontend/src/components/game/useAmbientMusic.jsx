@@ -9,22 +9,37 @@ import { useEffect, useRef, useState } from 'react';
 // available without rebuild.
 const APARTMENT_KINGDOM = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/dcnbec0u_Fluffy%20The%20apartment%20kingdom.mp3';
 const INTRO_SCREEN      = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/aic7e8tz_Fluffy%20Nine%20Lives%2C%20Nine%20Legends%2C%20intro%20screen.mp3';
-const BACK_ALLEY        = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/tp6ckoxf_Fluffy%20The%20Back%20to%20Alley%20Kingdom.mp3';
+const FOOD_BOWL_TEMPLE  = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/1zdcasjr_Fluffy%20The%20Food%20bowl%20Temple.mp3';
+const CURTAIN_REALM     = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/mfq00gfc_Fluffy%20The%20Curtain%20Realm.mp3';
+const LAUNDRY_LABYRINTH = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/flmh5sya_Fluffy%20The%20Laundry%20labyrinth.mp3';
 const BATHROOM_OCEAN    = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/9c37q667_Fluffy%20The%20Bathroom%20ocean.mp3';
+const BACK_ALLEY        = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/tp6ckoxf_Fluffy%20The%20Back%20to%20Alley%20Kingdom.mp3';
+const ROOFTOP_THRONE    = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/5h0kiqxm_Fluffy%20The%20Rooftop%20throne.mp3';
+const SERVANT_TRIALS    = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/1fa31anz_Fluffy%20The%20Human%20servant%20trials.mp3';
 const COSMIC_WINDOW     = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/eb0ynrt9_Fluffy%20The%20Cosmic%20window.mp3';
 
 const TRACKS = {
     // Title screen
     menu:       { fantasy: INTRO_SCREEN,      reality: INTRO_SCREEN },
-    // Chapter I — The Apartment Kingdom (covers bedroom, living room, garden)
+    // Chapter I  — The Apartment Kingdom (bedroom, living room, garden)
     bedroom:    { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
     livingroom: { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
     garden:     { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
-    // Chapter V — The Bathroom Ocean (pre-wired for future room id 'bathroom')
+    // Chapter II — The Food Bowl Temple
+    foodbowl:   { fantasy: FOOD_BOWL_TEMPLE,  reality: FOOD_BOWL_TEMPLE },
+    // Chapter III — The Curtain Realm
+    curtain:    { fantasy: CURTAIN_REALM,     reality: CURTAIN_REALM },
+    // Chapter IV — The Laundry Labyrinth
+    laundry:    { fantasy: LAUNDRY_LABYRINTH, reality: LAUNDRY_LABYRINTH },
+    // Chapter V — The Bathroom Ocean
     bathroom:   { fantasy: BATHROOM_OCEAN,    reality: BATHROOM_OCEAN },
-    // Chapter VI — The Back Alley Kingdom (pre-wired for future room id 'alley')
+    // Chapter VI — The Back Alley Kingdom
     alley:      { fantasy: BACK_ALLEY,        reality: BACK_ALLEY },
-    // Chapter IX — The Cosmic Window (pre-wired for future room id 'cosmic')
+    // Chapter VII — The Rooftop Throne
+    rooftop:    { fantasy: ROOFTOP_THRONE,    reality: ROOFTOP_THRONE },
+    // Chapter VIII — The Human Servant Trials
+    humans:     { fantasy: SERVANT_TRIALS,    reality: SERVANT_TRIALS },
+    // Chapter IX — The Cosmic Window
     cosmic:     { fantasy: COSMIC_WINDOW,     reality: COSMIC_WINDOW },
 };
 
