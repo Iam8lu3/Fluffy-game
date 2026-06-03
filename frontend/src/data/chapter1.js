@@ -8,12 +8,12 @@ export const ASSETS = {
     fluffySprite: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/e7nxl8cp_1.png',
     // Reality artwork — the actual home
     livingroom:   'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/knj9vvrm_Living%20room.png',
-    bedroom:      'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/beee8b84da7cc37d05198471b5029c618a237fbe34facf8eae4a298d68e5142d.png',
-    garden:       'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a103dc004177d2f34d73dcb9cc585c689d078e8540c649692c15d38b0daa2464.png',
+    bedroom:      'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/vharuc2f_Bedroom%20reality.png',
+    garden:       'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/dak6yp82_Backyard%20reality.png',
     // Fantasy artwork — Fluffy's reinterpretation, same layouts re-skinned
-    bedroomFantasy:    'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/3bbf57e6fe9a33dd6162c457f6440108c1c01247e31e9f5e498a2f964080a1a8.png',
-    livingroomFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/d0be13ea7a3f73b39fd92d201383b61d5885a79f00e55ef757d93d5385f5c318.png',
-    gardenFantasy:     'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/5a3cf736b27bbdb2786f382c565606f6bba3036e573232174df4c283c04942fe.png',
+    bedroomFantasy:    'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/t9acie6j_Bedroom%20Fantasy.png',
+    livingroomFantasy: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/cjj6bwt5_Living%20room%20fantasy.png',
+    gardenFantasy:     'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/vpk3jc1g_Backyard%20fantasy.png',
     portraitFantasy: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/502fe4e92af9d6facecf8b4ffc4f0023b324ba0ec5aa10fe76a0875c5746d22c.png',
     portraitReality: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/41a170430063921ba188d8ead4ca03cae7475b6be0c6ab17ac0f0c9d9590afb1.png',
     menuBg: 'https://static.prod-images.emergentagent.com/jobs/36edfcf3-5190-4ffa-a7a6-7e0c15c7cb29/images/a199ba31e0c1f11e9a95f17923d3991a7ef30a767a2b6749b51f14e0daeefcc3.png',
@@ -507,7 +507,7 @@ export const ROOMS = {
         id: 'livingroom',
         titleFantasy: 'The Great Hall',
         titleReality: 'Our Living Room',
-        bgFantasy: ASSETS.livingroom,
+        bgFantasy: ASSETS.livingroomFantasy,
         bgReality: ASSETS.livingroom,
         spawnX: 24,
         onEnterMonologue: {
