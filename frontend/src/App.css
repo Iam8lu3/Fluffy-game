@@ -479,6 +479,100 @@
 }
 .upcoming-cast-body { flex: 1; min-width: 0; }
 
+/* ===== Trailer reel (hidden /trailer route) ===== */
+.trailer-stage {
+    position: fixed;
+    inset: 0;
+    background: #050710;
+    overflow: hidden;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--fl-light);
+}
+.trailer-start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.trailer-play {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    background: linear-gradient(180deg, rgba(255,176,66,0.18), rgba(122,34,38,0.4));
+    border: 1px solid var(--fl-candle);
+    color: var(--fl-candle-soft);
+    box-shadow: 0 0 24px rgba(255,176,66,0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.trailer-play:hover { transform: translateY(-2px); box-shadow: 0 0 32px rgba(255,176,66,0.45); }
+
+.trailer-scene {
+    position: absolute;
+    inset: 0;
+    animation: trailer-fade-in 480ms ease both;
+}
+.trailer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.trailer-bg {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    animation: trailer-kenburns 3.2s ease both;
+}
+@keyframes trailer-kenburns {
+    from { transform: scale(1.04); }
+    to   { transform: scale(1.10); }
+}
+@keyframes trailer-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.trailer-vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.95) 100%);
+}
+.trailer-title-card {
+    position: absolute;
+    bottom: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    animation: trailer-fade-in 520ms ease both;
+}
+.trailer-hotspot-demo {
+    position: absolute;
+    top: 45%;
+    left: 38%;
+    width: 84px; height: 84px;
+}
+.trailer-bottom {
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    text-align: center;
+}
+.trailer-cta {
+    padding: 8px 18px;
+    border: 1px solid var(--fl-gold);
+    color: var(--fl-candle-soft);
+    background: rgba(11,14,23,0.65);
+    text-decoration: none;
+    transition: all 0.18s ease;
+}
+.trailer-cta:hover { background: rgba(255,176,66,0.18); color: #fff; }
+.trailer-cta.patreon { border-color: rgba(255,255,255,0.5); background: linear-gradient(135deg, #ff424d, #c1233a); color: #fff; }
+
 /* dialogue overlay panel — sits near bottom of scene area */
 .dialogue-overlay {
     position: absolute;
