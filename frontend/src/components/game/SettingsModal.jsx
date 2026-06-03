@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
 const SETTINGS_KEY = 'fluffy_settings_v1';
-const defaults = { textSpeed: 22, volume: 60, parchmentMode: true };
+const defaults = { textSpeed: 22 };
 
-export default function SettingsModal({ onClose }) {
+/**
+ * Settings panel.
+ *
+ * Volume + mute are NOT stored here — they are owned by the `useAmbientMusic`
+ * hook (single source of truth) and persisted by it under `fluffy_music_*`.
+ * We accept the live `music` controller as a prop so the slider drives the
+ * actual <audio> element in real time.
+ */
+export default function SettingsModal({ onClose, music }) {
     const [s, setS] = useState(() => {
         try { return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; }
         catch (err) { console.warn('[Fluffy] settings load failed:', err); return defaults; }
@@ -14,6 +22,9 @@ export default function SettingsModal({ onClose }) {
         catch (err) { console.warn('[Fluffy] settings save failed:', err); }
     }, [s]);
 
+    const volPct = Math.round((music?.volume ?? 0) * 100);
+    const muted  = !!music?.muted;
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-[2px]" data-testid="settings-modal">
             <div className="surface-parchment frame-ornate w-[min(560px,92%)] p-7">
@@ -21,16 +32,53 @@ export default function SettingsModal({ onClose }) {
                     <h2 className="font-script text-3xl text-[var(--fl-blood)]">Hearthside Settings</h2>
                     <button data-testid="settings-close" onClick={onClose} className="icon-btn !text-[var(--fl-ink)] !bg-transparent !border-[var(--fl-ink)]/40">Close ✕</button>
                 </div>
+
                 <div className="space-y-5">
                     <Field label="Narration Speed">
-                        <input type="range" min="8" max="60" value={s.textSpeed} onChange={(e) => setS({ ...s, textSpeed: +e.target.value })} className="w-full" data-testid="settings-textspeed" />
+                        <input
+                            type="range" min="8" max="60"
+                            value={s.textSpeed}
+                            onChange={(e) => setS({ ...s, textSpeed: +e.target.value })}
+                            className="w-full"
+                            data-testid="settings-textspeed"
+                        />
                         <Hint>Currently: {s.textSpeed} ms per glyph</Hint>
                     </Field>
+
                     <Field label="Atmospheric Volume">
-                        <input type="range" min="0" max="100" value={s.volume} onChange={(e) => setS({ ...s, volume: +e.target.value })} className="w-full" data-testid="settings-volume" />
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="range" min="0" max="100"
+                                value={muted ? 0 : volPct}
+                                disabled={!music}
+                                onChange={(e) => {
+                                    if (!music) return;
+                                    const v = +e.target.value / 100;
+                                    music.setVolume(v);
+                                    if (muted && v > 0) music.setMuted(false);
+                                }}
+                                className="flex-1"
+                                data-testid="settings-volume"
+                                aria-label="Music volume"
+                            />
+                            <button
+                                type="button"
+                                data-testid="settings-mute"
+                                onClick={() => music && music.setMuted(!muted)}
+                                disabled={!music}
+                                className="icon-btn !text-[var(--fl-ink)] !bg-transparent !border-[var(--fl-ink)]/40 px-3"
+                                title={muted ? 'Unmute' : 'Mute'}
+                            >
+                                <span className="font-script text-lg">{muted ? '𝄽' : '♪'}</span>
+                                <span className="ml-1 font-display uppercase tracking-[0.18em] text-[0.65rem]">
+                                    {muted ? 'Muted' : `${volPct}%`}
+                                </span>
+                            </button>
+                        </div>
                         <Hint>The mortal ear shall be respected.</Hint>
                     </Field>
                 </div>
+
                 <p className="font-dialogue italic text-[var(--fl-ink)]/70 mt-6 text-sm">
                     Settings are saved to your browser. They do not, alas, follow you across realms.
                 </p>

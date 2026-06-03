@@ -19,7 +19,10 @@
     transition: filter 700ms ease;
 }
 .menu-stage.menu-reality {
-    filter: saturate(0.35) brightness(0.7) hue-rotate(-15deg) contrast(0.95);
+    /* Reality view uses its own handcrafted artwork (a quiet apartment study with
+       Fluffy on his cat tree throne). No tinting filter — let the art breathe. */
+    background-image: url('https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/guphil6c_ChatGPT%20Image%20Jun%203%2C%202026%2C%2008_35_22%20AM.png');
+    filter: none;
 }
 .menu-stage::before {
     content: '';
@@ -28,7 +31,11 @@
     pointer-events: none;
 }
 .menu-stage.menu-reality::before {
-    background: linear-gradient(180deg, rgba(7,6,10,0.7) 0%, rgba(7,6,10,0.5) 35%, rgba(7,6,10,0.92) 100%);
+    /* Stronger left-side veil so the title text stays legible over the reality
+       artwork. The right half of the frame (the cat & throne) is kept clearer. */
+    background:
+        linear-gradient(180deg, rgba(7,6,10,0.55) 0%, rgba(7,6,10,0.25) 35%, rgba(7,6,10,0.92) 100%),
+        linear-gradient(90deg, rgba(7,6,10,0.78) 0%, rgba(7,6,10,0.45) 38%, rgba(7,6,10,0.12) 65%, rgba(7,6,10,0.0) 100%);
 }
 .menu-mode-toggle {
     background: rgba(7,6,10,0.55) !important;

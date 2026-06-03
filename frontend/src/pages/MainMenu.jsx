@@ -177,7 +177,7 @@ export default function MainMenu() {
                 <span>v0.1 · Vertical Slice</span>
             </div>
 
-            {modal === 'settings' && <SettingsModal onClose={() => setModal(null)} />}
+            {modal === 'settings' && <SettingsModal onClose={() => setModal(null)} music={music} />}
             {modal === 'credits' && <CreditsModal onClose={() => setModal(null)} />}
             {modal === 'chapters' && <ChaptersModal onClose={() => setModal(null)} onStart={onNew} />}
         </div>
