@@ -1,12 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Per-room AND per-mode tracks. Either side may be null; the hook falls back
-// to the other side if one is missing so every room has SOMETHING playing as
-// long as one track is provided.
-//
-// Composer-uploaded files live in /app/frontend/public is NOT used —
-// instead we reference the user's customer-assets URLs directly so they are
-// available without rebuild.
+/**
+ * Ambient music — module-level singleton.
+ *
+ * One <audio> element is shared by every screen (MainMenu, Game, Trailer…) so
+ * that navigating between screens does NOT leave an orphaned audio object
+ * playing the previous zone's track. Moving between rooms or screens just
+ * swaps the src on the singleton with a soft crossfade.
+ *
+ * Volume + mute live here (single source of truth) and are persisted to
+ * localStorage under `fluffy_music_vol` / `fluffy_music_muted`.
+ *
+ * Composer-uploaded files are referenced directly via customer-assets URLs.
+ */
 const APARTMENT_KINGDOM = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/dcnbec0u_Fluffy%20The%20apartment%20kingdom.mp3';
 const INTRO_SCREEN      = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/aic7e8tz_Fluffy%20Nine%20Lives%2C%20Nine%20Legends%2C%20intro%20screen.mp3';
 const FOOD_BOWL_TEMPLE  = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/1zdcasjr_Fluffy%20The%20Food%20bowl%20Temple.mp3';
@@ -18,96 +24,156 @@ const ROOFTOP_THRONE    = 'https://customer-assets.emergentagent.com/job_nine-li
 const SERVANT_TRIALS    = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/1fa31anz_Fluffy%20The%20Human%20servant%20trials.mp3';
 const COSMIC_WINDOW     = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/eb0ynrt9_Fluffy%20The%20Cosmic%20window.mp3';
 
+// One track per zone (room id). Same track is used for fantasy & reality —
+// dual-track-per-room is on the roadmap but not implemented yet.
 const TRACKS = {
-    // Title screen
-    menu:       { fantasy: INTRO_SCREEN,      reality: INTRO_SCREEN },
-    // Chapter I  — The Apartment Kingdom (bedroom, living room, garden)
-    bedroom:    { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
-    livingroom: { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
-    garden:     { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
-    // Chapter II — The Food Bowl Temple
-    foodbowl:   { fantasy: FOOD_BOWL_TEMPLE,  reality: FOOD_BOWL_TEMPLE },
-    // Chapter III — The Curtain Realm
-    curtain:    { fantasy: CURTAIN_REALM,     reality: CURTAIN_REALM },
-    // Chapter IV — The Laundry Labyrinth
-    laundry:    { fantasy: LAUNDRY_LABYRINTH, reality: LAUNDRY_LABYRINTH },
-    // Chapter V — The Bathroom Ocean
-    bathroom:   { fantasy: BATHROOM_OCEAN,    reality: BATHROOM_OCEAN },
-    // Chapter VI — The Back Alley Kingdom
-    alley:      { fantasy: BACK_ALLEY,        reality: BACK_ALLEY },
-    // Chapter VII — The Rooftop Throne
-    rooftop:    { fantasy: ROOFTOP_THRONE,    reality: ROOFTOP_THRONE },
-    // Chapter VIII — The Human Servant Trials
-    humans:     { fantasy: SERVANT_TRIALS,    reality: SERVANT_TRIALS },
-    // Chapter IX — The Cosmic Window
-    cosmic:     { fantasy: COSMIC_WINDOW,     reality: COSMIC_WINDOW },
+    menu:       INTRO_SCREEN,
+    // Chapter I  — The Apartment Kingdom
+    bedroom:    APARTMENT_KINGDOM,
+    livingroom: APARTMENT_KINGDOM,
+    garden:     APARTMENT_KINGDOM,
+    // Chapter II onward placeholders
+    foodbowl:   FOOD_BOWL_TEMPLE,
+    curtain:    CURTAIN_REALM,
+    laundry:    LAUNDRY_LABYRINTH,
+    bathroom:   BATHROOM_OCEAN,
+    alley:      BACK_ALLEY,
+    rooftop:    ROOFTOP_THRONE,
+    humans:     SERVANT_TRIALS,
+    cosmic:     COSMIC_WINDOW,
 };
 
-const VOL_KEY = 'fluffy_music_vol';
+const VOL_KEY  = 'fluffy_music_vol';
 const MUTE_KEY = 'fluffy_music_muted';
 
-function resolveTrack(roomId, mode) {
-    const room = TRACKS[roomId] || {};
-    return room[mode] || room[mode === 'fantasy' ? 'reality' : 'fantasy'] || null;
+// -------------------- Singleton state --------------------
+let globalAudio   = null;
+let currentSrc    = '';
+let pendingFadeIv = null;
+let globalVolume  = (() => {
+    try { const v = Number(localStorage.getItem(VOL_KEY)); return Number.isFinite(v) && v > 0 ? v : 0.45; }
+    catch { return 0.45; }
+})();
+let globalMuted   = (() => {
+    try { return localStorage.getItem(MUTE_KEY) === '1'; } catch { return false; }
+})();
+const subscribers = new Set();
+
+function notify() { subscribers.forEach(fn => fn()); }
+
+function ensureAudio() {
+    if (!globalAudio) {
+        const a = new Audio();
+        a.loop   = true;
+        a.volume = globalVolume;
+        a.muted  = globalMuted;
+        globalAudio = a;
+    }
+    return globalAudio;
 }
 
-export default function useAmbientMusic(roomId, mode = 'fantasy') {
-    const audioRef = useRef(null);
-    const [muted, setMuted] = useState(() => {
-        try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (err) { console.warn('[Fluffy] music: read mute failed:', err); return false; }
-    });
-    const [volume, setVolume] = useState(() => {
-        try { const v = Number(localStorage.getItem(VOL_KEY)); return Number.isFinite(v) && v > 0 ? v : 0.45; } catch (err) { console.warn('[Fluffy] music: read volume failed:', err); return 0.45; }
-    });
+function clearFade() {
+    if (pendingFadeIv) { clearInterval(pendingFadeIv); pendingFadeIv = null; }
+}
 
-    useEffect(() => {
-        try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (err) { console.warn('[Fluffy] music: write mute failed:', err); }
-        if (audioRef.current) audioRef.current.muted = muted;
-    }, [muted]);
-
-    useEffect(() => {
-        try { localStorage.setItem(VOL_KEY, String(volume)); } catch (err) { console.warn('[Fluffy] music: write volume failed:', err); }
-        if (audioRef.current) audioRef.current.volume = volume;
-    }, [volume]);
-
-    useEffect(() => {
-        const src = resolveTrack(roomId, mode);
-        if (!src) {
-            if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; audioRef.current = null; }
-            return;
-        }
-        if (!audioRef.current) {
-            const a = new Audio(src);
-            a.loop = true;
-            a.volume = volume;
-            a.muted = muted;
-            audioRef.current = a;
+function setSource(src) {
+    // Empty src — pause and clear.
+    if (!src) {
+        clearFade();
+        if (globalAudio) globalAudio.pause();
+        currentSrc = '';
+        return;
+    }
+    const a = ensureAudio();
+    // Same zone — just make sure it's playing.
+    if (currentSrc === src) {
+        if (a.paused) a.play().catch(() => {});
+        return;
+    }
+    currentSrc = src;
+    clearFade();
+    // First-time load OR fresh src after a pause: play directly.
+    if (!a.src) {
+        a.src = src;
+        a.volume = globalMuted ? 0 : globalVolume;
+        a.play().catch(() => {});
+        return;
+    }
+    // Crossfade: fade out → swap src → fade in.
+    const targetVol = globalVolume;
+    pendingFadeIv = setInterval(() => {
+        if (a.volume > 0.04) {
+            a.volume = Math.max(0, a.volume - 0.06);
+        } else {
+            clearInterval(pendingFadeIv);
+            a.src = src;
+            a.volume = 0;
             a.play().catch(() => {});
-        } else if (!audioRef.current.src.endsWith(src.split('/').pop())) {
-            // Soft crossfade — quick fade-out, swap src, quick fade-in
-            const a = audioRef.current;
-            const targetVol = volume;
-            const fadeOut = setInterval(() => {
-                if (a.volume > 0.02) a.volume = Math.max(0, a.volume - 0.05);
-                else {
-                    clearInterval(fadeOut);
-                    a.src = src;
-                    a.play().catch(() => {});
-                    const fadeIn = setInterval(() => {
-                        if (a.volume < targetVol - 0.02) a.volume = Math.min(targetVol, a.volume + 0.04);
-                        else { a.volume = targetVol; clearInterval(fadeIn); }
-                    }, 60);
+            pendingFadeIv = setInterval(() => {
+                if (a.volume < targetVol - 0.04) {
+                    a.volume = Math.min(targetVol, a.volume + 0.05);
+                } else {
+                    a.volume = globalMuted ? 0 : targetVol;
+                    clearInterval(pendingFadeIv);
+                    pendingFadeIv = null;
                 }
-            }, 50);
+            }, 55);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roomId, mode]);
+    }, 45);
+}
 
+function setGlobalVolume(v) {
+    const clamped = Math.max(0, Math.min(1, v));
+    globalVolume = clamped;
+    try { localStorage.setItem(VOL_KEY, String(clamped)); } catch { /* noop */ }
+    if (globalAudio && !pendingFadeIv && !globalMuted) globalAudio.volume = clamped;
+    notify();
+}
+
+function setGlobalMuted(m) {
+    globalMuted = !!m;
+    try { localStorage.setItem(MUTE_KEY, globalMuted ? '1' : '0'); } catch { /* noop */ }
+    if (globalAudio) globalAudio.muted = globalMuted;
+    notify();
+}
+
+// Browsers block autoplay until the first user gesture — once we have one,
+// any audio that was created before the gesture can finally start.
+if (typeof window !== 'undefined') {
+    const kick = () => {
+        if (globalAudio && globalAudio.src && globalAudio.paused) {
+            globalAudio.play().catch(() => {});
+        }
+    };
+    window.addEventListener('pointerdown', kick);
+    window.addEventListener('keydown', kick);
+}
+
+/**
+ * useAmbientMusic(roomId)
+ * Drives the singleton audio to whatever track this room/zone owns.
+ * `mode` is accepted for backwards compatibility but currently unused —
+ * a single track plays in both Fantasy and Reality for a given room.
+ */
+export default function useAmbientMusic(roomId /*, mode */) {
+    const [, force] = useState(0);
+
+    // Subscribe so volume/mute changes anywhere re-render every consumer.
     useEffect(() => {
-        const tryPlay = () => { if (audioRef.current && audioRef.current.paused) audioRef.current.play().catch(() => {}); };
-        window.addEventListener('pointerdown', tryPlay, { once: true });
-        return () => window.removeEventListener('pointerdown', tryPlay);
+        const fn = () => force(n => n + 1);
+        subscribers.add(fn);
+        return () => { subscribers.delete(fn); };
     }, []);
 
-    return { muted, setMuted, volume, setVolume };
+    // Drive the singleton's source from this consumer's room.
+    useEffect(() => {
+        setSource(TRACKS[roomId] || '');
+    }, [roomId]);
+
+    return {
+        muted:     globalMuted,
+        volume:    globalVolume,
+        setMuted:  setGlobalMuted,
+        setVolume: setGlobalVolume,
+    };
 }

@@ -1016,6 +1016,78 @@ export const COMBOS = {
     },
 };
 
+
+// ----------------------- FLUFFY HIMSELF -----------------------
+// When the player clicks Fluffy directly, route through this table.
+// Lines cycle with repeat clicks (`pickByCount`). A per-room override may
+// override the generic line if present. Reality and Fantasy variants are
+// both warm — Fluffy is utterly self-assured, the contrast is the humor.
+export const FLUFFY_SELF = {
+    labelFantasy: 'Myself, the Demon Destroyer',
+    labelReality: 'Me',
+    look: {
+        fantasy: [
+            "I behold myself. Magnificent. As expected.",
+            "Coat of midnight. Eyes of jade. Bearing: regal. Posture: feared.",
+            "I am the prophecy. The prophecy looks well today.",
+        ],
+        reality: [
+            "I am a black housecat. I have always been a black housecat. It is going fine.",
+            "I look down at my paws. Still four. Still mine.",
+            "I check my fur. It is correct. As always.",
+        ],
+        byRoom: {
+            bedroom: {
+                fantasy: "Even in repose I am formidable. The Sanctum bears witness.",
+                reality: "I sit on the rug. The sunlight has not reached me yet. It will.",
+            },
+            livingroom: {
+                fantasy: "Here, in the Great Hall, my silhouette throws long shadows. As is correct.",
+                reality: "I stand in the middle of the living room. The couch is to my left. I know.",
+            },
+            garden: {
+                fantasy: "Even in the Forbidden Realm I am unbothered. This is the trick of it.",
+                reality: "I am a black cat in a garden. The bees do not know what to do about this.",
+            },
+        },
+    },
+    use: { // "Touch" in the verb panel — Fluffy grooms / preens
+        fantasy: [
+            "I groom my flank. Even at rest, I keep my edges keen.",
+            "A single lick to the paw. A blade is sharpened in many ways.",
+            "I attend to my coat. The Realm will not have a scruffy Destroyer.",
+        ],
+        reality: [
+            "I lick my paw. Twice. It is a necessary chore.",
+            "I groom my shoulder. The mom keeps trying to brush me. She does not understand my system.",
+            "A quick clean of the chest fur. Maintenance.",
+        ],
+    },
+    talk: {
+        fantasy: [
+            "I commune with myself. The conversation, as ever, is excellent.",
+            "I speak softly to my own greatness. Modesty, but only just.",
+            "'Fluffy,' I say to Fluffy, 'you are doing extraordinary work today.' I do not disagree.",
+        ],
+        reality: [
+            "I meow, quietly, to no one. To me. I am the only one listening, and I am the right audience.",
+            "A soft 'mrrp' for my own benefit. The humans are not here. The cat is enough.",
+            "I murmur. It is between me and me.",
+        ],
+    },
+    take: {
+        // You cannot pick yourself up. (Used with verb 'Take' / 'Claim'.)
+        fantasy: [
+            "I cannot pocket what I already am.",
+            "One does not carry the Demon Destroyer. One IS carried — by legend.",
+        ],
+        reality: [
+            "I am a whole cat. I cannot pick up a whole cat.",
+            "That is not how cats work. I would know.",
+        ],
+    },
+};
+
 export const CHAPTER_META = {
     id: 'ch1',
     number: 'I',

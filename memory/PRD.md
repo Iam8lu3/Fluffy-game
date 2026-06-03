@@ -51,6 +51,8 @@ A premium narrative point-and-click adventure inspired by LucasArts SCUMM, Broke
 - ✅ Main menu **Reality** view now uses a dedicated handcrafted background (apartment-study-with-cat-tree-throne artwork) instead of the previous color-filtered fantasy bg. Left side has a stronger vertical veil so the title block stays readable; right side is left mostly clear so the cat is the hero of the frame.
 - ✅ **Settings → Atmospheric Volume** is now wired to the live ambient music. The slider directly drives `music.setVolume()` and persists via the music hook's own `fluffy_music_vol` localStorage key (single source of truth). New inline mute button shows live `♪ 70%` / `𝄽 MUTED` state. Moving the slider while muted auto-unmutes (good UX).
 - 🧹 Removed the duplicate, non-functional `volume` field that used to live inside `fluffy_settings_v1` — settings modal no longer owns audio state.
+- ✅ **`useAmbientMusic` refactored to a module-level singleton.** One shared `<audio>` element is reused across MainMenu, Game and Trailer — navigating between screens just swaps the src with a soft crossfade. Verified: only 1 Audio instance is ever created during a full menu → game → menu cycle, and the menu intro track no longer keeps playing on top of the in-game track. Volume/mute notify all subscribers so any screen's controls stay in sync.
+- ✅ **Fluffy himself is now interactable.** Clicking the Fluffy sprite triggers the current verb (`Look` / `Touch` / `Talk` / `Take`) against a special `'self'` hotspot id. New `FLUFFY_SELF` data table in `chapter1.js` provides cycling fantasy + reality lines per verb, plus per-room overrides for `look` (bedroom / livingroom / garden). Visual: subtle gold+green glow on hover.
 
 ## Prioritized Backlog
 - **P0** — None blocking.

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback, useMemo } from 'react';
-import { CHAPTER_META, ROOMS, ITEMS, COMBOS, DIALOGUE_TREES, deriveQuestStates, pickByCount } from '../data/chapter1';
+import { CHAPTER_META, ROOMS, ITEMS, COMBOS, DIALOGUE_TREES, FLUFFY_SELF, deriveQuestStates, pickByCount } from '../data/chapter1';
 
 const SAVE_KEY = 'fluffy_save_v2';
 
@@ -135,9 +135,36 @@ export function GameProvider({ children }) {
 
     const interact = useCallback((roomId, hotspotId) => {
         const room = ROOMS[roomId];
+        const verb = state.verb;
+
+        // ---- Special: clicking Fluffy himself ----
+        if (hotspotId === 'self') {
+            const ikey = `self:${roomId}:${verb}`;
+            const count = state.interactionCounts[ikey] || 0;
+            // animate Fluffy on himself — talk/touch/look mapped accordingly
+            const actionByVerb = { look: 'examine', use: 'groom', talk: 'talk', take: 'take' };
+            triggerAction(actionByVerb[verb] || 'idle', 1100);
+
+            const variant = FLUFFY_SELF[verb];
+            if (!variant) {
+                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I do not act upon myself like that.' : "That's not really a thing I do." });
+                return;
+            }
+            // Per-room override wins over the generic cycle.
+            const override = variant.byRoom && variant.byRoom[roomId];
+            let text;
+            if (override) {
+                text = state.mode === 'fantasy' ? override.fantasy : override.reality;
+            } else {
+                text = pickByCount(state.mode === 'fantasy' ? variant.fantasy : variant.reality, count);
+            }
+            pushLog({ kind: 'mono', text });
+            dispatch({ type: 'BUMP_INTERACTION', key: ikey });
+            return;
+        }
+
         const hs = room.hotspots.find(h => h.id === hotspotId);
         if (!hs) return;
-        const verb = state.verb;
         const ikey = `${roomId}:${hs.id}:${verb}`;
         const count = state.interactionCounts[ikey] || 0;
 
