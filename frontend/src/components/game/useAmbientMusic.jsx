@@ -3,20 +3,29 @@ import { useEffect, useRef, useState } from 'react';
 // Per-room AND per-mode tracks. Either side may be null; the hook falls back
 // to the other side if one is missing so every room has SOMETHING playing as
 // long as one track is provided.
-// To add tracks, drop the URL (or local path like '/audio/garden.mp3') in the
-// appropriate slot below. Designed for the user's stated future goal: one
-// soundtrack per room per mode.
+//
+// Composer-uploaded files live in /app/frontend/public is NOT used —
+// instead we reference the user's customer-assets URLs directly so they are
+// available without rebuild.
+const APARTMENT_KINGDOM = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/dcnbec0u_Fluffy%20The%20apartment%20kingdom.mp3';
+const INTRO_SCREEN      = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/aic7e8tz_Fluffy%20Nine%20Lives%2C%20Nine%20Legends%2C%20intro%20screen.mp3';
+const BACK_ALLEY        = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/tp6ckoxf_Fluffy%20The%20Back%20to%20Alley%20Kingdom.mp3';
+const BATHROOM_OCEAN    = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/9c37q667_Fluffy%20The%20Bathroom%20ocean.mp3';
+const COSMIC_WINDOW     = 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/eb0ynrt9_Fluffy%20The%20Cosmic%20window.mp3';
+
 const TRACKS = {
-    menu: {
-        fantasy: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/hc20i8mu_The%20Master%20Bedroom%20%E2%80%93%20Just%20After%20Sunrise.mp3',
-        reality: null,
-    },
-    bedroom: {
-        fantasy: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/hc20i8mu_The%20Master%20Bedroom%20%E2%80%93%20Just%20After%20Sunrise.mp3',
-        reality: null,
-    },
-    livingroom: { fantasy: null, reality: null },
-    garden:     { fantasy: null, reality: null },
+    // Title screen
+    menu:       { fantasy: INTRO_SCREEN,      reality: INTRO_SCREEN },
+    // Chapter I — The Apartment Kingdom (covers bedroom, living room, garden)
+    bedroom:    { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
+    livingroom: { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
+    garden:     { fantasy: APARTMENT_KINGDOM, reality: APARTMENT_KINGDOM },
+    // Chapter V — The Bathroom Ocean (pre-wired for future room id 'bathroom')
+    bathroom:   { fantasy: BATHROOM_OCEAN,    reality: BATHROOM_OCEAN },
+    // Chapter VI — The Back Alley Kingdom (pre-wired for future room id 'alley')
+    alley:      { fantasy: BACK_ALLEY,        reality: BACK_ALLEY },
+    // Chapter IX — The Cosmic Window (pre-wired for future room id 'cosmic')
+    cosmic:     { fantasy: COSMIC_WINDOW,     reality: COSMIC_WINDOW },
 };
 
 const VOL_KEY = 'fluffy_music_vol';
