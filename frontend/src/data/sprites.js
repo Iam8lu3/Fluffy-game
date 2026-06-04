@@ -48,6 +48,7 @@ export const POSES = {
     PAW:     'paw',        // paw-up, mid-inspect
     PICKUP:  'pickup',     // bending to take
     SLEEP:   'sleep',      // curled up
+    GROOM:   'groom',      // licking-paw self-care
     // Fantasy-flavored poses (Fluffy's heroic self-image)
     REGAL:        'regal',
     PROCLAMATION: 'proclamation',
@@ -61,22 +62,19 @@ export const WALK_CYCLE = [POSES.WALK_1, POSES.WALK_2];
 // ─────────────────────────────────────────────────────────────────────────
 export const SPRITES = {
     reality: {
-        // example (commented):
-        // idle:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-idle.png' },
-        // walk1: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-walk1.png' },
-        // walk2: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-walk2.png' },
-        // sit:   { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-sit.png' },
-        // sleep: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-sleep.png' },
+        idle:   { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/3jwy5lys_Fluffy%20reality%20stand.png' },
+        walk1:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/49qaak9c_Fluffy%20reality%20walk%201.png' },
+        walk2:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/ik3h0w1x_Fluffy%20reality%20walk%202.png' },
+        sit:    { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/wx3v8vk7_Fluffy%20reality%20sit%20Facing%20forward.png' },
+        look:   { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/ajx7ooc3_Fluffy%20reality%20sit%20look%20up.png' },
+        sniff:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/41xkdm62_Fluffy%20reality%20play-crouch.png' },
+        paw:    { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/jppqpy3f_Fluffy%20reality%20paw.png' },
+        pickup: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/f7ngjtgr_Fluffy%20reality%20sit%20look%20down.png' },
+        sleep:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/y9utwzsg_Fluffy%20reality%20sleep.png' },
+        groom:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/9lpf6zu1_Fluffy%20reality%20sit%20clean.png' },
     },
     fantasy: {
-        // The 94c04phf sheet has 5 poses on solid black bg. Wire it in by
-        // re-exporting each pose as a TRANSPARENT PNG, then uncomment:
-        //
-        // idle:  { url: '<transparent-idle.png>' },
-        // walk1: { url: '<transparent-walk1.png>' },
-        // walk2: { url: '<transparent-walk2.png>' },
-        // sit:   { url: '<transparent-sit.png>' },
-        // sleep: { url: '<transparent-sleep.png>' },
+        // Waiting on transparent-background fantasy sprites.
     },
 };
 

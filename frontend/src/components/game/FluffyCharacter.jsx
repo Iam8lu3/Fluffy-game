@@ -54,9 +54,10 @@ export default function FluffyCharacter() {
             case 'talk':    return POSES.IDLE;
             case 'pickup':  return POSES.PICKUP;
             case 'paw':     return POSES.PAW;
-            case 'groom':   return POSES.SIT;
+            case 'groom':   return POSES.GROOM;
             case 'sit':     return POSES.SIT;
             case 'sleep':   return POSES.SLEEP;
+            case 'sniff':   return POSES.SNIFF;
             case 'take':    return POSES.PICKUP;
             default:        return idlePose;
         }

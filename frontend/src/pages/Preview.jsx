@@ -7,15 +7,16 @@ import SpriteRenderer from '../components/game/SpriteRenderer';
 import '../preview.css';
 
 const ALL_POSES = [
-    { id: POSES.IDLE,         label: 'Idle' },
+    { id: POSES.IDLE,         label: 'Idle / Stand' },
     { id: POSES.WALK_1,       label: 'Walk 1' },
     { id: POSES.WALK_2,       label: 'Walk 2' },
-    { id: POSES.SIT,          label: 'Sit' },
-    { id: POSES.LOOK,         label: 'Look (examine)' },
-    { id: POSES.SNIFF,        label: 'Sniff' },
+    { id: POSES.SIT,          label: 'Sit (forward)' },
+    { id: POSES.LOOK,         label: 'Look up (examine)' },
+    { id: POSES.SNIFF,        label: 'Sniff / Play-crouch' },
     { id: POSES.PAW,          label: 'Paw / Touch' },
     { id: POSES.PICKUP,       label: 'Pickup / Take' },
     { id: POSES.SLEEP,        label: 'Sleep' },
+    { id: POSES.GROOM,        label: 'Groom (clean)' },
     { id: POSES.REGAL,        label: 'Regal (fantasy-only)' },
     { id: POSES.PROCLAMATION, label: 'Proclamation (fantasy-only)' },
 ];
@@ -30,6 +31,7 @@ const ACTION_BY_POSE = {
     [POSES.PAW]:          'paw',
     [POSES.PICKUP]:       'pickup',
     [POSES.SLEEP]:        'sleep',
+    [POSES.GROOM]:        'groom',
     [POSES.REGAL]:        'idle',
     [POSES.PROCLAMATION]: 'talk',
 };

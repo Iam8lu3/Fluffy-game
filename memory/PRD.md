@@ -60,7 +60,10 @@ A premium narrative point-and-click adventure inspired by LucasArts SCUMM, Broke
 - ✅ **Expanded CSS animation library** on the existing single sprite: new keyframes for `walking` (squash bob), `paw`, `pickup`, `sniff`, `sleep` (breathing), plus reworked `examine/touch/talk/take`. Walk-cycle frame swap happens in JS every 180 ms via `WALK_CYCLE`.
 - ✅ **Ambient idle drift**: when Fluffy is idle for >3.5–8 s, his pose subtly drifts between `idle / sit / look / (rare) sleep` instead of being a statue.
 - ✅ **Sprite library scaffolding (Path A foundation)**: new `data/sprites.js` + `components/game/SpriteRenderer.jsx`. Supports two upload formats — one PNG per pose **or** a single sheet with bounding boxes — and falls back to the existing single sprite when a pose isn't registered. You can drop in pose PNGs one at a time without breaking the game.
-- ⚠️ **Sprite sheets received on DeviantArt have solid backgrounds (black for fantasy, white for reality).** They cannot be composited over the painted scenes until they're re-exported as **transparent PNGs**. Once you have transparent versions, simply add their URLs into `SPRITES.reality` / `SPRITES.fantasy` in `data/sprites.js` and they'll auto-replace the fallback sprite.
+- ✅ **Reality Fluffy sprite set fully wired** (2026-06-04): 10 transparent PNG poses uploaded and mapped — `idle (stand)`, `walk1`, `walk2`, `sit (forward)`, `look (look-up)`, `sniff (play-crouch)`, `paw (touch)`, `pickup (look-down)`, `sleep (curled)`, `groom (cleaning)`. Engine now renders each pose contextually per verb. `/preview` shows all 10 as `CUSTOM SPRITE`.
+- ✅ **Concept Art Bible** authored at `/app/memory/CONCEPT_ART_BIBLE.md` — full art briefs for chapters II–IX (Reality + Fantasy + key objects), with copy-paste-ready image prompts and special direction for Queen LaSqueeka's debut in Ch. III.
+- ✅ **Future-chapter scaffolding** at `data/futureChapters.js` — pre-set room ids / titles / spawnX / music wiring for chapters II–IX so dropping in real art is a 2-URL swap.
+- ✅ **`/preview` developer route**: Fluffy Poses tab + Room Backgrounds tab, side-by-side Reality vs Fantasy panes, live status badges (`CUSTOM SPRITE` / `FALLBACK` for sprites, `LIVE` / `placeholder art` for rooms).
 
 ## Prioritized Backlog
 - **P0** — None blocking.
