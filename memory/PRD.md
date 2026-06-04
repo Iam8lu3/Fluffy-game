@@ -54,6 +54,14 @@ A premium narrative point-and-click adventure inspired by LucasArts SCUMM, Broke
 - ✅ **`useAmbientMusic` refactored to a module-level singleton.** One shared `<audio>` element is reused across MainMenu, Game and Trailer — navigating between screens just swaps the src with a soft crossfade. Verified: only 1 Audio instance is ever created during a full menu → game → menu cycle, and the menu intro track no longer keeps playing on top of the in-game track. Volume/mute notify all subscribers so any screen's controls stay in sync.
 - ✅ **Fluffy himself is now interactable.** Clicking the Fluffy sprite triggers the current verb (`Look` / `Touch` / `Talk` / `Take`) against a special `'self'` hotspot id. New `FLUFFY_SELF` data table in `chapter1.js` provides cycling fantasy + reality lines per verb, plus per-room overrides for `look` (bedroom / livingroom / garden). Visual: subtle gold+green glow on hover.
 
+## What's Implemented (2026-06-04)
+- ✅ **New room artwork swapped in** for Bedroom (Fantasy + Reality), Living Room (Fantasy) and Backyard/Garden (Fantasy + Reality). Fixed a latent bug where `livingroom.bgFantasy` was incorrectly pointing at the reality asset.
+- ✅ **Movement system (Path D — bridge phase)**: Fluffy now walks to the target hotspot instead of teleporting. Walk duration is distance-proportional (22 ms/% with min 180 / max 700 ms). Monologue/dialogue fires at ~60% of the walk (Monkey-Island SE feel) so the game stays responsive; verb-specific arrival pose lands when he arrives. Clicking Fluffy himself skips the walk.
+- ✅ **Expanded CSS animation library** on the existing single sprite: new keyframes for `walking` (squash bob), `paw`, `pickup`, `sniff`, `sleep` (breathing), plus reworked `examine/touch/talk/take`. Walk-cycle frame swap happens in JS every 180 ms via `WALK_CYCLE`.
+- ✅ **Ambient idle drift**: when Fluffy is idle for >3.5–8 s, his pose subtly drifts between `idle / sit / look / (rare) sleep` instead of being a statue.
+- ✅ **Sprite library scaffolding (Path A foundation)**: new `data/sprites.js` + `components/game/SpriteRenderer.jsx`. Supports two upload formats — one PNG per pose **or** a single sheet with bounding boxes — and falls back to the existing single sprite when a pose isn't registered. You can drop in pose PNGs one at a time without breaking the game.
+- ⚠️ **Sprite sheets received on DeviantArt have solid backgrounds (black for fantasy, white for reality).** They cannot be composited over the painted scenes until they're re-exported as **transparent PNGs**. Once you have transparent versions, simply add their URLs into `SPRITES.reality` / `SPRITES.fantasy` in `data/sprites.js` and they'll auto-replace the fallback sprite.
+
 ## Prioritized Backlog
 - **P0** — None blocking.
 - **P1** — Add subtle ambient audio loop (would need user upload or stock SFX).

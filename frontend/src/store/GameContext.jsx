@@ -18,7 +18,8 @@ const initialState = {
     dialogue: null,
     fluffyPos: 30,
     fluffyFacing: 'right',
-    fluffyAction: 'idle', // idle | walking | examine | touch | talk | take | sit | groom
+    fluffyAction: 'idle', // idle | walking | examine | touch | talk | take | sit | groom | sniff | paw | pickup | sleep
+    fluffyWalkMs: 600,    // duration of the current/next walk transition
     showHotspots: false,
     transitioning: false,
 };
@@ -45,6 +46,17 @@ function reducer(state, action) {
             const newPos = action.pos;
             const facing = newPos > state.fluffyPos ? 'right' : (newPos < state.fluffyPos ? 'left' : state.fluffyFacing);
             return { ...state, fluffyPos: newPos, fluffyFacing: facing };
+        }
+        case 'WALK_TO': {
+            const newPos = action.pos;
+            const facing = newPos > state.fluffyPos ? 'right' : (newPos < state.fluffyPos ? 'left' : state.fluffyFacing);
+            return {
+                ...state,
+                fluffyPos: newPos,
+                fluffyFacing: facing,
+                fluffyAction: 'walking',
+                fluffyWalkMs: action.duration,
+            };
         }
         case 'PUSH_LOG':
             return { ...state, log: [...state.log.slice(-40), action.entry] };
@@ -137,27 +149,22 @@ export function GameProvider({ children }) {
         const room = ROOMS[roomId];
         const verb = state.verb;
 
-        // ---- Special: clicking Fluffy himself ----
+        // ---- Special: clicking Fluffy himself (no walking — he's already there) ----
         if (hotspotId === 'self') {
             const ikey = `self:${roomId}:${verb}`;
             const count = state.interactionCounts[ikey] || 0;
-            // animate Fluffy on himself — talk/touch/look mapped accordingly
-            const actionByVerb = { look: 'examine', use: 'groom', talk: 'talk', take: 'take' };
-            triggerAction(actionByVerb[verb] || 'idle', 1100);
+            const selfActionByVerb = { look: 'examine', use: 'groom', talk: 'talk', take: 'paw' };
+            triggerAction(selfActionByVerb[verb] || 'idle', 1100);
 
             const variant = FLUFFY_SELF[verb];
             if (!variant) {
                 pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I do not act upon myself like that.' : "That's not really a thing I do." });
                 return;
             }
-            // Per-room override wins over the generic cycle.
             const override = variant.byRoom && variant.byRoom[roomId];
-            let text;
-            if (override) {
-                text = state.mode === 'fantasy' ? override.fantasy : override.reality;
-            } else {
-                text = pickByCount(state.mode === 'fantasy' ? variant.fantasy : variant.reality, count);
-            }
+            const text = override
+                ? (state.mode === 'fantasy' ? override.fantasy : override.reality)
+                : pickByCount(state.mode === 'fantasy' ? variant.fantasy : variant.reality, count);
             pushLog({ kind: 'mono', text });
             dispatch({ type: 'BUMP_INTERACTION', key: ikey });
             return;
@@ -165,111 +172,135 @@ export function GameProvider({ children }) {
 
         const hs = room.hotspots.find(h => h.id === hotspotId);
         if (!hs) return;
-        const ikey = `${roomId}:${hs.id}:${verb}`;
+        const ikey  = `${roomId}:${hs.id}:${verb}`;
         const count = state.interactionCounts[ikey] || 0;
 
-        // Move Fluffy toward the hotspot before the response
-        const targetX = Math.max(6, Math.min(94, hs.x + hs.w / 2));
-        dispatch({ type: 'SET_FLUFFY_POS', pos: targetX });
+        // --- SNAPPY MOVEMENT ---
+        // Walk Fluffy toward the hotspot. Dialogue fires at ~60% of the walk
+        // (Monkey-Island SE feel) so the player isn't kept waiting; the
+        // arrival animation pose lands when he actually gets there.
+        const targetX  = Math.max(6, Math.min(94, hs.x + hs.w / 2));
+        const distance = Math.abs(targetX - state.fluffyPos);
+        const SPEED    = 22;        // ms per 1% of stage width
+        const MIN_MS   = 180;
+        const MAX_MS   = 700;
+        const walkMs   = distance < 1.5
+            ? 0
+            : Math.max(MIN_MS, Math.min(MAX_MS, Math.round(distance * SPEED)));
 
-        // Map verb → character action animation
-        const actionByVerb = { look: 'examine', use: 'touch', talk: 'talk', take: 'take' };
-        triggerAction(actionByVerb[verb] || 'idle', 900);
+        if (walkMs > 0) dispatch({ type: 'WALK_TO', pos: targetX, duration: walkMs });
 
-        // movement (use on door)
-        if (verb === 'use' && hs.use && hs.use.goto && !state.selectedItem) {
-            setTimeout(() => enterRoom(hs.use.goto), 350);
-            return;
-        }
+        // Arrival animation per verb / target type
+        const arrivalAction =
+              verb === 'look' ? 'examine'
+            : verb === 'talk' ? 'talk'
+            : verb === 'take' ? ((hs.searchItem || (hs.take && hs.take.item)) ? 'pickup' : 'paw')
+            : verb === 'use'  ? (hs.use && hs.use.goto ? 'walking' : 'touch')
+            : 'idle';
 
-        // look
-        if (verb === 'look' && hs.look) {
-            const text = pickByCount(state.mode === 'fantasy' ? hs.look.fantasy : hs.look.reality, count);
-            pushLog({ kind: 'mono', text });
-            dispatch({ type: 'BUMP_INTERACTION', key: ikey });
-            return;
-        }
+        const dialogueDelay = Math.round(walkMs * 0.60);
+        const arrivalDelay  = walkMs;
 
-        // take
-        if (verb === 'take') {
-            if (hs.take && typeof hs.take === 'object' && hs.take.item) {
-                const have = state.inventory[hs.take.item];
-                if (have) {
-                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I already carry that.' : "I already have that. It's in the satchel." });
-                    return;
-                }
-                dispatch({ type: 'GIVE_ITEM', item: hs.take.item });
-                const text = state.mode === 'fantasy' ? hs.take.onceFantasy : hs.take.onceReality;
+        const fireDialogue = () => {
+            // verb=use+door (navigation)
+            if (verb === 'use' && hs.use && hs.use.goto && !state.selectedItem) {
+                setTimeout(() => enterRoom(hs.use.goto), Math.max(0, arrivalDelay - dialogueDelay + 60));
+                return;
+            }
+
+            // LOOK
+            if (verb === 'look' && hs.look) {
+                const text = pickByCount(state.mode === 'fantasy' ? hs.look.fantasy : hs.look.reality, count);
                 pushLog({ kind: 'mono', text });
-                return;
-            }
-            if (hs.searchItem) {
-                const have = state.inventory[hs.searchItem.item];
-                if (have) {
-                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I have already drawn what is here.' : "Already searched. Nothing else jumped out." });
-                    return;
-                }
-                dispatch({ type: 'GIVE_ITEM', item: hs.searchItem.item });
-                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? hs.searchItem.onceFantasy : hs.searchItem.onceReality });
-                return;
-            }
-            if (hs.take) {
-                pushLog({ kind: 'mono', text: pickByCount(state.mode === 'fantasy' ? hs.take.fantasy : hs.take.reality, count) });
                 dispatch({ type: 'BUMP_INTERACTION', key: ikey });
                 return;
             }
-            pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'Nothing here yields to my paw.' : 'Nothing to pick up here.' });
-            return;
-        }
 
-        // talk
-        if (verb === 'talk') {
-            if (hs.talk?.tree) {
-                dispatch({ type: 'START_DIALOGUE', treeId: hs.talk.tree, nodeId: DIALOGUE_TREES[hs.talk.tree].start });
-                return;
-            }
-            if (hs.talk) {
-                const text = pickByCount(state.mode === 'fantasy' ? hs.talk.fantasy : hs.talk.reality, count);
-                pushLog({ kind: 'mono', text });
-                if (hs.talk.sets) dispatch({ type: 'SET_FLAG', flag: hs.talk.sets });
-                dispatch({ type: 'BUMP_INTERACTION', key: ikey });
-                return;
-            }
-            pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'It keeps its counsel. Out of respect, I keep mine.' : "It is not the sort of thing that speaks." });
-            return;
-        }
-
-        // use (with selected item if any)
-        if (verb === 'use') {
-            if (state.selectedItem) {
-                if (hs.useWith && hs.useWith[state.selectedItem]) {
-                    const result = hs.useWith[state.selectedItem];
-                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? result.fantasy : result.reality });
-                    if (result.ending) {
-                        dispatch({ type: 'SET_FLAG', flag: 'wyrm_defeated' });
-                        dispatch({ type: 'CHAPTER_DONE' });
+            // TAKE
+            if (verb === 'take') {
+                if (hs.take && typeof hs.take === 'object' && hs.take.item) {
+                    if (state.inventory[hs.take.item]) {
+                        pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I already carry that.' : "I already have that. It's in the satchel." });
+                        return;
                     }
-                    dispatch({ type: 'SET_ITEM_SELECTED', item: null });
+                    dispatch({ type: 'GIVE_ITEM', item: hs.take.item });
+                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? hs.take.onceFantasy : hs.take.onceReality });
                     return;
                 }
-                if (hs.useWith && hs.useWith.default) {
-                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? hs.useWith.default.fantasy : hs.useWith.default.reality });
+                if (hs.searchItem) {
+                    if (state.inventory[hs.searchItem.item]) {
+                        pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'I have already drawn what is here.' : "Already searched. Nothing else jumped out." });
+                        return;
+                    }
+                    dispatch({ type: 'GIVE_ITEM', item: hs.searchItem.item });
+                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? hs.searchItem.onceFantasy : hs.searchItem.onceReality });
                     return;
                 }
-                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'The relic refuses to act upon it.' : "That doesn't seem to do anything here." });
+                if (hs.take) {
+                    pushLog({ kind: 'mono', text: pickByCount(state.mode === 'fantasy' ? hs.take.fantasy : hs.take.reality, count) });
+                    dispatch({ type: 'BUMP_INTERACTION', key: ikey });
+                    return;
+                }
+                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'Nothing here yields to my paw.' : 'Nothing to pick up here.' });
                 return;
             }
-            if (hs.use) {
-                if (hs.use.goto) { setTimeout(() => enterRoom(hs.use.goto), 350); return; }
-                const text = pickByCount(state.mode === 'fantasy' ? hs.use.fantasy : hs.use.reality, count);
-                pushLog({ kind: 'mono', text });
-                dispatch({ type: 'BUMP_INTERACTION', key: ikey });
+
+            // TALK
+            if (verb === 'talk') {
+                if (hs.talk?.tree) {
+                    dispatch({ type: 'START_DIALOGUE', treeId: hs.talk.tree, nodeId: DIALOGUE_TREES[hs.talk.tree].start });
+                    return;
+                }
+                if (hs.talk) {
+                    const text = pickByCount(state.mode === 'fantasy' ? hs.talk.fantasy : hs.talk.reality, count);
+                    pushLog({ kind: 'mono', text });
+                    if (hs.talk.sets) dispatch({ type: 'SET_FLAG', flag: hs.talk.sets });
+                    dispatch({ type: 'BUMP_INTERACTION', key: ikey });
+                    return;
+                }
+                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'It keeps its counsel. Out of respect, I keep mine.' : 'It is not the sort of thing that speaks.' });
                 return;
             }
-            pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'There is no use I can put it to.' : "Nothing happens." });
-            return;
+
+            // USE (with selected inventory item or environmental use)
+            if (verb === 'use') {
+                if (state.selectedItem) {
+                    if (hs.useWith && hs.useWith[state.selectedItem]) {
+                        const result = hs.useWith[state.selectedItem];
+                        pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? result.fantasy : result.reality });
+                        if (result.ending) {
+                            dispatch({ type: 'SET_FLAG', flag: 'wyrm_defeated' });
+                            dispatch({ type: 'CHAPTER_DONE' });
+                        }
+                        dispatch({ type: 'SET_ITEM_SELECTED', item: null });
+                        return;
+                    }
+                    if (hs.useWith && hs.useWith.default) {
+                        pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? hs.useWith.default.fantasy : hs.useWith.default.reality });
+                        return;
+                    }
+                    pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'The relic refuses to act upon it.' : "That doesn't seem to do anything here." });
+                    return;
+                }
+                if (hs.use) {
+                    const text = pickByCount(state.mode === 'fantasy' ? hs.use.fantasy : hs.use.reality, count);
+                    pushLog({ kind: 'mono', text });
+                    dispatch({ type: 'BUMP_INTERACTION', key: ikey });
+                    return;
+                }
+                pushLog({ kind: 'mono', text: state.mode === 'fantasy' ? 'There is no use I can put it to.' : "Nothing happens." });
+            }
+        };
+
+        // Schedule: dialogue ~60% of walk, arrival pose at walk end.
+        if (walkMs === 0) {
+            triggerAction(arrivalAction, 900);
+            fireDialogue();
+        } else {
+            setTimeout(fireDialogue, dialogueDelay);
+            setTimeout(() => triggerAction(arrivalAction, 900), arrivalDelay);
         }
-    }, [enterRoom, pushLog, state.interactionCounts, state.inventory, state.mode, state.selectedItem, state.verb]);
+    }, [enterRoom, pushLog, triggerAction, state.fluffyPos, state.interactionCounts, state.inventory, state.mode, state.selectedItem, state.verb]);
 
     const chooseDialogue = useCallback((choice) => {
         if (!state.dialogue) return;

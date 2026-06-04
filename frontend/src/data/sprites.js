@@ -1,0 +1,106 @@
+// ============================================================================
+// Fluffy Sprite Library  ─  Path A (multi-sprite) configuration
+// ----------------------------------------------------------------------------
+// Each entry in SPRITES describes ONE pose for ONE mode. When a pose+mode
+// combo is registered here, the SpriteRenderer will use it instead of the
+// generic single-sprite fallback. Poses not registered here fall back to the
+// `FALLBACK_SPRITE` image (with CSS animations) automatically — so the game
+// never breaks when you upload sprites one at a time.
+//
+// ----------------------------------------------------------------------------
+// To register a new pose:
+//   1. Upload a TRANSPARENT-BACKGROUND .png to customer-assets (one file per
+//      pose, OR a single sheet containing several poses).
+//   2. Add an entry below. Two formats are supported:
+//
+//   Format A — one PNG per pose (RECOMMENDED, easiest):
+//      reality: {
+//        idle:  { url: '<url-to-idle.png>' },
+//        sit:   { url: '<url-to-sit.png>' },
+//        walk1: { url: '<url-to-walk1.png>' },
+//        walk2: { url: '<url-to-walk2.png>' },
+//        ...
+//      }
+//
+//   Format B — sprite-sheet with bounding boxes (for compact uploads):
+//      reality: {
+//        _sheet: { url: '<url>', naturalWidth: 2048, naturalHeight: 2048 },
+//        idle:  { sheet: true, x:   30, y:   60, w: 280, h: 320 },
+//        walk1: { sheet: true, x:  340, y:   60, w: 320, h: 300 },
+//        ...
+//      }
+//
+//   Both formats can be mixed within a mode.
+// ----------------------------------------------------------------------------
+
+export const FALLBACK_SPRITE =
+    'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/e7nxl8cp_1.png';
+
+// The pose IDs the renderer knows how to ask for. Order matters for animation
+// playback (e.g. WALK_CYCLE alternates walk1 ↔ walk2).
+export const POSES = {
+    IDLE:    'idle',
+    SIT:     'sit',
+    WALK_1:  'walk1',
+    WALK_2:  'walk2',
+    LOOK:    'look',       // head-up, examining
+    SNIFF:   'sniff',      // head-down toward object
+    PAW:     'paw',        // paw-up, mid-inspect
+    PICKUP:  'pickup',     // bending to take
+    SLEEP:   'sleep',      // curled up
+    // Fantasy-flavored poses (Fluffy's heroic self-image)
+    REGAL:        'regal',
+    PROCLAMATION: 'proclamation',
+};
+
+export const WALK_CYCLE = [POSES.WALK_1, POSES.WALK_2];
+
+// ─────────────────────────────────────────────────────────────────────────
+// Sprite library. Starts empty — every pose currently falls back to the
+// single static sprite + CSS animation. Drop entries in as PNGs arrive.
+// ─────────────────────────────────────────────────────────────────────────
+export const SPRITES = {
+    reality: {
+        // example (commented):
+        // idle:  { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-idle.png' },
+        // walk1: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-walk1.png' },
+        // walk2: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-walk2.png' },
+        // sit:   { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-sit.png' },
+        // sleep: { url: 'https://customer-assets.emergentagent.com/job_nine-lives-quest/artifacts/XXXX_fluffy-reality-sleep.png' },
+    },
+    fantasy: {
+        // The 94c04phf sheet has 5 poses on solid black bg. Wire it in by
+        // re-exporting each pose as a TRANSPARENT PNG, then uncomment:
+        //
+        // idle:  { url: '<transparent-idle.png>' },
+        // walk1: { url: '<transparent-walk1.png>' },
+        // walk2: { url: '<transparent-walk2.png>' },
+        // sit:   { url: '<transparent-sit.png>' },
+        // sleep: { url: '<transparent-sleep.png>' },
+    },
+};
+
+/**
+ * Resolve the best sprite for a (mode, pose) request.
+ * Returns one of:
+ *   { kind: 'image', url }
+ *   { kind: 'sheet', url, x, y, w, h, naturalWidth, naturalHeight }
+ *   { kind: 'fallback', url }   ← single static sprite, animated via CSS
+ */
+export function resolveSprite(mode, pose) {
+    const modeLib = SPRITES[mode] || {};
+    const entry   = modeLib[pose];
+    if (entry && entry.url) {
+        return { kind: 'image', url: entry.url };
+    }
+    if (entry && entry.sheet && modeLib._sheet) {
+        return {
+            kind: 'sheet',
+            url: modeLib._sheet.url,
+            naturalWidth:  modeLib._sheet.naturalWidth,
+            naturalHeight: modeLib._sheet.naturalHeight,
+            x: entry.x, y: entry.y, w: entry.w, h: entry.h,
+        };
+    }
+    return { kind: 'fallback', url: FALLBACK_SPRITE, pose };
+}
