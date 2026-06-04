@@ -73,6 +73,7 @@ export function pickByCount(text, count = 0) {
 export const ROOMS = {
     bedroom: {
         id: 'bedroom',
+        chapter: 1,
         titleFantasy: 'My Sanctum',
         titleReality: 'The Master Bedroom — Just After Sunrise',
         bgFantasy: ASSETS.bedroomFantasy,
@@ -505,6 +506,7 @@ export const ROOMS = {
 
     livingroom: {
         id: 'livingroom',
+        chapter: 1,
         titleFantasy: 'The Great Hall',
         titleReality: 'Our Living Room',
         bgFantasy: ASSETS.livingroomFantasy,
@@ -794,6 +796,7 @@ export const ROOMS = {
 
     garden: {
         id: 'garden',
+        chapter: 1,
         titleFantasy: 'The Forbidden Realm',
         titleReality: 'The Front Garden',
         bgFantasy: ASSETS.gardenFantasy,

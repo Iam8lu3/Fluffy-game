@@ -5,6 +5,7 @@ import { GameProvider } from './store/GameContext';
 import MainMenu from './pages/MainMenu';
 import Game from './pages/Game';
 import Trailer from './pages/Trailer';
+import Preview from './pages/Preview';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                         <Route path="/" element={<MainMenu />} />
                         <Route path="/game" element={<Game />} />
                         <Route path="/trailer" element={<Trailer />} />
+                        <Route path="/preview" element={<Preview />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                 </BrowserRouter>
